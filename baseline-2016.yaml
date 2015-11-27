@@ -1,0 +1,85 @@
+prep:
+	title: SHOFCO Kibera Baseline Survey Form
+	questions:
+		Village:
+			type: options
+			options:
+			- Mashimoni
+			- Lindi
+			- Kianda
+			- Kisumu Ndongo
+		Language interview conducted in:
+			type: options
+			options:
+			- English
+			- Kiswahili
+			- Luo
+			- Other
+consent:
+	title: Informed Consent
+	static: |
+		Good morning/afternoon. My name is ($user). I am from Shining Hope for Communities,
+		an organization that offers health and education programs and services for Kibera and
+		Mathare residents.  We are conducting a survey of the people who live in this
+		community and therefore your household has been randomly selected to participate
+		in this study.
+		
+		I will ask you questions about the people living in your house: their health,
+		relationships, work, education, their use of health and social services during the
+		past year. 
+		
+		Your participation to this survey is completely voluntary and your answers will remain
+		confidential. If you have any questions or complaints about this interview please
+		contact the Research Manager, Solomon Odero at 0707080734
+		
+qualification:
+	title: Preliminary Questions
+	numbered: true
+	questions:
+		SHOFCO Participant:
+			type: yes/no
+			label: "Have you ever participated in SHOFCO services (Kibera School for Girls, JJJ Clinic, SHOFCO Clean Water, SHOFCO Community centers)?"
+			subs:
+				when: yes
+				SHOFCO Programs:
+					type: checkboxes
+					label: Which SHOFCO Programs have you and/or your children participated in/utilized?
+					options:
+					- JJJ Clinic
+					- SHOFCO Clean Water Kiosk
+					- Kibera School for Girls
+					- "GS&L"
+					- Urban Movement
+					- Youth Programs
+					- SWEP
+					- Gender Department
+				Ghetto Mirror:
+					type: yes/no
+					label: Have you ever read the Ghetto Mirror?
+			rules:
+				yes: END
+		Interested:
+			type: yes/no
+			label: "Are you [any of present household members] interested in participating in this survey?"
+			rules:
+				no: END
+		Above 18:
+			type: number
+			label: How many present household members are above 18?
+			instructions: |
+				Ask for IDs or DOB.
+			subs:
+				when: >1
+				Random Selection:
+					type: random
+					min: 1
+					max: (Above 18)
+			rules:
+				0: END
+		Agreement:
+			type: yes/no
+			label: Does the respondent agree to participate?
+		Consent Verification:
+			type: signature
+			label: I certify that I have read the above consent procedure to the participant
+			
