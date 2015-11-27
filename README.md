@@ -1,12 +1,9 @@
 # Editing a survey
 
-Download TextMate
-
-TextMate > Preferences > Bundles
-
-Check YAML
-
-Before editing: Make sure the bottom bar shows "Soft Tabs: 4"
+* Download TextMate
+* Navigate to TextMate > Preferences > Bundles
+* Check YAML
+* Before editing: Make sure the bottom bar shows "Soft Tabs: 4"
 
 
 # TODO
