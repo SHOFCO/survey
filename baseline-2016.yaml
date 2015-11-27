@@ -1,18 +1,18 @@
 -   title: SHOFCO Kibera Baseline Survey Form
     questions:
-		-   label: Village
-			type: options
-			options:
-			- Mashimoni
-			- Lindi
-			- Kianda
-			- Kisumu Ndongo
+        -   label: Village
+            type: options
+            options:
+            - Mashimoni
+            - Lindi
+            - Kianda
+            - Kisumu Ndongo
         -   label: Language interview conducted in
-			type: options
-			options:
-			- English
-			- Kiswahili
-			- Luo
+            type: options
+            options:
+            - English
+            - Kiswahili
+            - Luo
             other: true
 
 -   title: Informed Consent
@@ -35,11 +35,12 @@
 	numbered: true
 	questions:
 		-   label: "Have you ever participated in SHOFCO services (Kibera School for Girls, JJJ Clinic, SHOFCO Clean Water, SHOFCO Community centers)?"
-            type: yes/no
+            type: yesNo
+            endSurveyWhen: ($value) == 'yes'
 			subs:
 			-   label: Which SHOFCO Programs have you and/or your children participated in/utilized?
 				type: checkboxes
-                when: ($parent) == yes
+                when: ($parent) == 'yes'
 				options:
 				- JJJ Clinic
 				- SHOFCO Clean Water Kiosk
@@ -49,33 +50,32 @@
 				- Youth Programs
 				- SWEP
 				- Gender Department
+                - Cyber Café
+                - Community Library
+                - SHOFCO Daycare
             -   label: Have you ever read the Ghetto Mirror?
-                when: ($parent) == yes
-				type: yes/no
-			rules:
-				yes: END
+                when: ($parent) == 'yes'
+				type: yesNo
+        
+		-   label: "Are you [any of present household members] interested in participating in this survey?"
+			type: yesNo
+            endSurveyWhen: ($value) == 'no'
                 
-		-   label: How many present household members are above 18?
-			type: yes/no
-			label: "Are you [any of present household members] interested in participating in this survey?"
-			rules:
-				no: END
-                
-		-   label: How many present household members are above 18?
+		-   label: How many participating household members are above 18?
 			type: number
 			instructions: |
 				Ask for IDs or DOB.
+            endSurveyWhen: ($value) == 0
 			subs:
 			-    label: "Assign each person a number, starting with 1. Choose the below number as your participant."
 				 when: ($parent) > 1
                  type: random
 				 min: 1
 				 max: ($parent)
-			rules:
-				0: END
 
 		-   label: Does the respondent agree to participate?
-			type: yes/no
+			type: yesNo
+            endSurveyWhen: ($value) == 'no'
 			
 		-   label: I certify that I have read the above consent procedure to the participant
 			type: signature
