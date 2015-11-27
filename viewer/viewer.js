@@ -173,7 +173,14 @@ function renderYesNo(div, question, config) {
 }
 
 function renderText(div, question, config) {
-    div.append('TODO: text');
+    if (config.rows == 1 || config.rows === undefined) {
+        input = $('<input type="text">');
+    } else {
+        input = $('<textarea>').attr('rows', config.rows);
+    }
+    div.append(input.change(function() {
+        question.setValue(parseInt($(this).val(), 10));
+    }));
 }
 
 function renderSignature(div, question, config) {

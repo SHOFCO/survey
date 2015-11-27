@@ -202,3 +202,9 @@
         - "Fuel (e.g. Charcoal, Kerosene, Gas, Firewood)"
         - Rent
         - Electricity
+        
+    -   label: "How do you cover your monthly expenses (include all sources of incomes, including loans, money borrowed, etc)?"
+        instructions: |
+            Probe for more answers, especially if their listed income is much less than their reported expenses.
+        type: text
+        rows: 4

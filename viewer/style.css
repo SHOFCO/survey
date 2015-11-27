@@ -59,3 +59,7 @@ div.table tbody tr:nth-child(even) {
 div.table tbody input {
     width: 95%;
 }
+
+textarea {
+    width: 100%;
+}
