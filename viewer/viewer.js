@@ -22,6 +22,11 @@ function render(pages) {
         questions: []
     };
     
+    if (location.search == '?debugLast') {
+        pages = [last(pages)];
+        pages[0].questions = [last(pages[0].questions)];
+    }
+    
     for (var i = 0; i < pages.length; i++) {
         $(document.body).append(renderPage(state, pages[i]));
     }
@@ -51,6 +56,18 @@ function last(arr) {
     return arr[arr.length - 1];
 }
 
+function renderQuestions(state, div, questions, opt_parent) {
+    for (var i = 0; i < questions.length; i++) {
+        var q = questions[i];
+        div.append(renderQuestion(state, q));
+        last(state.questions).parent = opt_parent;
+        
+        if (q.subs) {
+            renderQuestions(state, div, q.subs, last(state.questions));
+        }
+    }
+}
+
 function renderPage(state, page) {
     var div = $('<div class="page">');
     div.append($('<h1>').text(page.title));
@@ -61,19 +78,7 @@ function renderPage(state, page) {
         }
     }
     if (page.questions) {
-        for (var i = 0; i < page.questions.length; i++) {
-            var q = page.questions[i];
-            div.append(renderQuestion(state, q));
-            
-            if (q.subs) {
-                var parent = last(state.questions);
-                for (var j = 0; j < q.subs.length; j++) {
-                    var sub = q.subs[j];
-                    div.append(renderQuestion(state, sub));
-                    last(state.questions).parent = parent;
-                }
-            }
-        }
+        renderQuestions(state, div, page.questions);
     }
 
     return div;

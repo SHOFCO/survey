@@ -208,3 +208,38 @@
             Probe for more answers, especially if their listed income is much less than their reported expenses.
         type: text
         rows: 4
+        
+    -   label: Do you have savings?
+        type: yesNo
+        subs:
+        -   label: How much do you save generally per month?
+            when: ($parent) == 'yes'
+            type: number
+        -   label: Why are you not able to save?
+            when: ($parent) == 'no'
+            type: text
+            rows: 3
+    
+    -   label: Do you have a bank account?
+        type: yesNo
+    
+    -   label: Are you currently employed?
+        type: yesNo
+        subs:
+        -   label: Do you think you have the training necessary for you to find employment that you want?
+            when: ($parent) == 'no'
+            type: yesNo
+            subs:
+            -   label: What is preventing you from getting the necessary training?
+                when: ($parent) == 'no'
+                type: options
+                options:
+                - Lack of money
+                - Short time
+                - Spouse doesn't approve
+                other: true
+            -   label: What is preventing you from getting a job?
+                when: ($parent) == 'yes'
+                type: text
+                rows: 3
+            
