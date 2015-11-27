@@ -7,7 +7,8 @@ RENDER = {
     'checkboxes': renderCheckboxes,
     'random': renderRandom,
     'number': renderNumber,
-    'options': renderOptions
+    'options': renderOptions,
+    'table': renderTable
 }
 
 $(document).ready(function() {
@@ -29,9 +30,21 @@ function render(pages) {
     $(document.body).append(state.end);
     
     setVisibility(state);
-    $(document.body).on('question:change', function() {
+    $('div.question').on('question:change', function() {
         setVisibility(state);
+        
+        var sel = $(this);
+        if (!sel.hasClass('checkboxes') && !sel.hasClass('random')) {
+            scrollPast(sel);
+        }
     });
+}
+
+function scrollPast(selector) {
+    $('html, body').animate(
+        {scrollTop: selector.offset().top + selector.height()}, 
+        400, 
+        'swing');
 }
 
 function last(arr) {
@@ -66,7 +79,7 @@ function renderPage(state, page) {
     return div;
 }
 
-function setVisibility(state) {
+function setVisibility(state, scroll) {
     $('div.page').hide();
     var i;
     var end = null;
@@ -102,11 +115,6 @@ function setVisibility(state) {
     for (i = i + 1; i < state.questions.length; i++) {
         state.questions[i].div.hide();
     }
-    
-    $('html, body').animate({ 
-        scrollTop: $(document).height() - $(window).height()}, 
-        400, 
-        'swing');
 }
 
 function isValue(value) {
@@ -187,14 +195,40 @@ function renderCheckboxes(div, question, config) {
                 .append($('<label>').attr('for', id).text(config.options[i])));
     }
     var checkboxes = div.find('input');
-    checkboxes.change(function() {
-        var result = [];
+    var noneId = question.id + '-none';
+    var updateValue = function() {
+        var result = {};
+        var any = false;
         checkboxes.each(function(i, el) {
-            result.push([config.options[i], $(el).is(':checked')]);
+            var val = $(el).is(':checked');
+            result[config.options[i]] = val;
+            any = any || val;
         });
-        question.setValue(result);
-        console.log(result);    
-    });
+        if (any) {
+            question.setValue(result);
+            $('#' + noneId).prop('checked', false);
+        } else if ($('#' + noneId).is(':checked')) {
+            question.setValue(result);
+        } else {
+            question.setValue(undefined);
+        }
+    };
+    checkboxes.change(updateValue);
+
+    if (config.noneOfTheAbove) {
+        var input = $('<input type="checkbox">').attr('id', noneId);
+        div.append(
+            $('<div class="checkbox">')
+                .append(input)
+                .append(' ')
+                .append($('<label>').attr('for', noneId).text('None of the above')));
+        input.change(function() {
+            if ($(this).is(':checked')) {
+                checkboxes.prop('checked', false);
+            }
+            updateValue();
+        });
+    }
 }
 
 function renderRandom(div, question, config) {
@@ -248,4 +282,40 @@ function renderOptions(div, question, config) {
             question.setValue($(this).val());
         })
     }
+}
+
+function renderTable(div, question, config) {
+    var table = $('<table>');
+    var tr = $('<tr>');
+    tr.append($('<th>').text(config.keyLabel));
+    tr.append($('<th>').text(config.valueLabel));
+    table.append($('<thead>').append(tr));
+    
+    var tbody = $('<tbody>');
+    table.append(tbody);
+    
+    for (var i = 0; i < config.keys.length; i++) {
+        tr = $('<tr>');
+        tr.append($('<td>').text(config.keys[i]));
+        tr.append($('<td>').append($('<input>').attr('type', config.valueType || 'text')));
+        tbody.append(tr);
+    }
+    
+    var inputs = table.find('input');
+    inputs.change(function() {
+        var result = {};
+        var all = true;
+        inputs.each(function(i, el) {
+            var value = $(el).val();
+            result[config.keys[i]] = value;
+            if (value === '') {
+                all = false;
+            }
+        });
+        if (all) {
+            question.setValue(result);
+        }
+    });
+    
+    div.append(table);
 }

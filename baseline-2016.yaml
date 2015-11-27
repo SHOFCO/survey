@@ -1,3 +1,4 @@
+##########################################################################
 -   title: SHOFCO Kibera Baseline Survey Form
     questions:
         -   label: Village
@@ -7,6 +8,12 @@
             - Lindi
             - Kianda
             - Kisumu Ndongo
+            - Silanga
+            - Raila
+            - Makongeni
+            - Gatwekera
+            other: true
+
         -   label: Language interview conducted in
             type: options
             options:
@@ -15,6 +22,7 @@
             - Luo
             other: true
 
+##########################################################################
 -   title: Informed Consent
     static: |
         Good morning/afternoon. My name is ($user). I am from Shining Hope for Communities,
@@ -31,6 +39,8 @@
         confidential. If you have any questions or complaints about this interview please
         contact the Research Manager, Solomon Odero at 0707080734
 
+
+##########################################################################
 -   title: Preliminary Questions
     numbered: true
     questions:
@@ -79,17 +89,21 @@
 
         -   label: I certify that I have read the above consent procedure to the participant
             type: signature
-			
+
+
+##########################################################################
 -   title: General Instructions For Interviewer
     static: |
         1. All the italic writings and bold are instructions for the interviewer to check, don’t read them aloud.
-    
-        2. All bold, not italic are to be read out for the respondents.
-    
-        3. If the respondent is not ready to respond or uncomfortable with the question, skip the question.
-    
-        4. If the respondent’s answer is not included in the answer choices, please include their answer in the “Other” answer space.  
 
+        2. All bold, not italic are to be read out for the respondents.
+
+        3. If the respondent is not ready to respond or uncomfortable with the question, skip the question.
+
+        4. If the respondent’s answer is not included in the answer choices, please include their answer in the “Other” answer space.
+
+
+##########################################################################
 -   title: Demographic Information
     static: "First I’d like to ask you some general questions about you and your family."
     questions:
@@ -99,11 +113,11 @@
         options:
         - Male
         - Female
-        
+
     -   label: How old are you? (number of years)
         type: number
         min: 18 # TODO: support this!
-        
+
     -   label: What is your marital status?
         type: options
         options:
@@ -112,29 +126,79 @@
         - Divorced
         - Widowed
         - Separated
-        
+
     -   label: Do you have children?
         type: yesNo
         subs:
         -   label: How many children do you have?
             when: ($parent) == 'yes'
             type: number
-        
+
     -   label: How many siblings do you have?
         type: number
-        
+
     -   label: Is your mother living?
         type: yesNo
-        
+
     -   label: Is your father living?
         type: yesNo
-        
+
     -   label: Were you born in Kibera?
         type: yesNo
         subs:
         -   label: What year did you move to Kibera?
             when: ($parent) == 'no'
             type: number
-            
+
+
+##########################################################################
+-   title: Economic
+    static: |
+        Now I would like to ask you some questions about your household, your
+        monthly expenses and income.
+    questions:
+    -   label: How many of the following items does your household currently own?
+        instructions: |
+            Answer should be number of Items owned (If the household owns 2 Radios then 2 should written in
+            the “Total in the household” column. If they do not own an item then 0 should be written in the
+            “Total in the household” column.
+        type: table
+        keyLabel: Item
+        valueLabel: Total in the household
+        valueType: number
+        keys:
+        - Radio
+        - Television
+        - Sofa
+        - Chairs
+        - Table
+        - Mobile phone
+        - Mattress
     
+    -   label: Do you have enough of the following items for every member of the household?
+        type: checkboxes
+        options:
+        - Cutlery
+        - Gum Boots
+        - Jacket
+        noneOfTheAbove: true
     
+    -   label: "In the last month, how much did you spend on:"
+        instructions: |
+            If the respondent is unsure of how much they spend, probe further (e.g. How many times in a week
+            do you purchase water and how much do you usually spend when you purchase water? From there you can
+            estimate monthly use. Confirm that the monthly amount makes sense to the respondent.
+        type: table
+        keyLabel: Expense
+        valueLabel: Amount of money household spent in Ksh
+        valueType: number
+        keys:
+        - Food
+        - Water
+        - Toilet Use
+        - Healthcare (Medical bills)
+        - Transportation
+        - Cell Phone Credit / Expense
+        - "Fuel (e.g. Charcoal, Kerosene, Gas, Firewood)"
+        - Rent
+        - Electricity
