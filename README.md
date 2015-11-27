@@ -8,6 +8,9 @@
 
 # TODO
 
+* Page level "when"
+* When conditions that refer to named fields
+* Question skipping
 * Compilation / validation
 * Local storage: survey in progress
 * Local storage: survey results

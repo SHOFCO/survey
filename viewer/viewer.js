@@ -21,6 +21,7 @@ function render(pages) {
     var state = {
         questions: []
     };
+    window.debugState = state;
     
     if (location.search == '?debugLast') {
         pages = [last(pages)];
@@ -206,14 +207,40 @@ function renderCheckboxes(div, question, config) {
                 .append(' ')
                 .append($('<label>').attr('for', id).text(config.options[i])));
     }
-    var checkboxes = div.find('input');
+    var otherId = question.id + '-other';
+    var otherLabelId = otherId + '-label';
+    var otherTextId = otherId + '-text';
+    if (config.other) {
+        div.append(
+            $('<div class="checkbox">')
+                .append($('<input type="checkbox">').attr('id', otherId))
+                .append(' ')
+                .append($('<label>').attr('for', otherId).attr('id', otherLabelId).text('Other'))
+                .append($('<input type="text">').attr('id', otherTextId).hide()));
+    }
+    var checkboxes = div.find('input[type=checkbox]');
     var noneId = question.id + '-none';
     var updateValue = function() {
         var result = {};
         var any = false;
         checkboxes.each(function(i, el) {
             var val = $(el).is(':checked');
-            result[config.options[i]] = val;
+            if (i < config.options.length) {
+                result[config.options[i]] = val;
+            } else if (val) {
+                var text = $('#' + otherTextId);
+                text.show()
+                if (this.id == otherId) {
+                    text.select();
+                }
+                val = text.val();
+                result['Other'] = val;
+                $('#' + otherLabelId).hide();
+            } else {
+                result['Other'] = '';
+                $('#' + otherLabelId).show();
+                $('#' + otherTextId).hide();
+            }
             any = any || val;
         });
         if (any) {
@@ -225,7 +252,7 @@ function renderCheckboxes(div, question, config) {
             question.setValue(undefined);
         }
     };
-    checkboxes.change(updateValue);
+    div.find('input').change(updateValue);
 
     if (config.noneOfTheAbove) {
         var input = $('<input type="checkbox">').attr('id', noneId);

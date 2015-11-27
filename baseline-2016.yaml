@@ -242,4 +242,25 @@
                 when: ($parent) == 'yes'
                 type: text
                 rows: 3
-            
+
+##########################################################################
+-   title: Economic
+    questions:
+    -   label: How many rooms are in your house?
+        instructions: Interviewer can answer by observation
+        type: number
+    
+    -   label: How many people live in your house?
+        instructions: "(If the number given doesn’t match the family chart, please ask clarifying questions)"
+        type: number
+    
+    -   label: What source of energy do you use to cook?
+        instructions: Check all that apply
+        type: checkboxes
+        options:
+        - Wood
+        - Carbon / charcoal
+        - Electricity / gas
+        - Kerosene
+        other: true
+        
