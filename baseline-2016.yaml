@@ -16,67 +16,125 @@
             other: true
 
 -   title: Informed Consent
-	static: |
-		Good morning/afternoon. My name is ($user). I am from Shining Hope for Communities,
-		an organization that offers health and education programs and services for Kibera and
-		Mathare residents.  We are conducting a survey of the people who live in this
-		community and therefore your household has been randomly selected to participate
-		in this study.
-		
-		I will ask you questions about the people living in your house: their health,
-		relationships, work, education, their use of health and social services during the
-		past year. 
-		
-		Your participation to this survey is completely voluntary and your answers will remain
-		confidential. If you have any questions or complaints about this interview please
-		contact the Research Manager, Solomon Odero at 0707080734
-		
+    static: |
+        Good morning/afternoon. My name is ($user). I am from Shining Hope for Communities,
+        an organization that offers health and education programs and services for Kibera and
+        Mathare residents.  We are conducting a survey of the people who live in this
+        community and therefore your household has been randomly selected to participate
+        in this study.
+
+        I will ask you questions about the people living in your house: their health,
+        relationships, work, education, their use of health and social services during the
+        past year.
+
+        Your participation to this survey is completely voluntary and your answers will remain
+        confidential. If you have any questions or complaints about this interview please
+        contact the Research Manager, Solomon Odero at 0707080734
+
 -   title: Preliminary Questions
-	numbered: true
-	questions:
-		-   label: "Have you ever participated in SHOFCO services (Kibera School for Girls, JJJ Clinic, SHOFCO Clean Water, SHOFCO Community centers)?"
+    numbered: true
+    questions:
+        -   label: "Have you ever participated in SHOFCO services (Kibera School for Girls, JJJ Clinic, SHOFCO Clean Water, SHOFCO Community centers)?"
             type: yesNo
             endSurveyWhen: ($value) == 'yes'
-			subs:
-			-   label: Which SHOFCO Programs have you and/or your children participated in/utilized?
-				type: checkboxes
+            subs:
+            -   label: Which SHOFCO Programs have you and/or your children participated in/utilized?
+                type: checkboxes
                 when: ($parent) == 'yes'
-				options:
-				- JJJ Clinic
-				- SHOFCO Clean Water Kiosk
-				- Kibera School for Girls
-				- "GS&L"
-				- Urban Movement
-				- Youth Programs
-				- SWEP
-				- Gender Department
+                options:
+                - JJJ Clinic
+                - SHOFCO Clean Water Kiosk
+                - Kibera School for Girls
+                - "GS&L"
+                - Urban Movement
+                - Youth Programs
+                - SWEP
+                - Gender Department
                 - Cyber Café
                 - Community Library
                 - SHOFCO Daycare
             -   label: Have you ever read the Ghetto Mirror?
                 when: ($parent) == 'yes'
-				type: yesNo
-        
-		-   label: "Are you [any of present household members] interested in participating in this survey?"
-			type: yesNo
-            endSurveyWhen: ($value) == 'no'
-                
-		-   label: How many participating household members are above 18?
-			type: number
-			instructions: |
-				Ask for IDs or DOB.
-            endSurveyWhen: ($value) == 0
-			subs:
-			-    label: "Assign each person a number, starting with 1. Choose the below number as your participant."
-				 when: ($parent) > 1
-                 type: random
-				 min: 1
-				 max: ($parent)
+                type: yesNo
 
-		-   label: Does the respondent agree to participate?
-			type: yesNo
+        -   label: "Are you [any of present household members] interested in participating in this survey?"
+            type: yesNo
             endSurveyWhen: ($value) == 'no'
+
+        -   label: How many participating household members are above 18?
+            type: number
+            instructions: |
+                Ask for IDs or DOB.
+            endSurveyWhen: ($value) == 0
+            subs:
+            -    label: "Assign each person a number, starting with 1. Choose the below number as your participant."
+                 when: ($parent) > 1
+                 type: random
+                 min: 1
+                 max: ($parent)
+
+        -   label: Does the respondent agree to participate?
+            type: yesNo
+            endSurveyWhen: ($value) == 'no'
+
+        -   label: I certify that I have read the above consent procedure to the participant
+            type: signature
 			
-		-   label: I certify that I have read the above consent procedure to the participant
-			type: signature
-			
+-   title: General Instructions For Interviewer
+    static: |
+        1. All the italic writings and bold are instructions for the interviewer to check, don’t read them aloud.
+    
+        2. All bold, not italic are to be read out for the respondents.
+    
+        3. If the respondent is not ready to respond or uncomfortable with the question, skip the question.
+    
+        4. If the respondent’s answer is not included in the answer choices, please include their answer in the “Other” answer space.  
+
+-   title: Demographic Information
+    static: "First I’d like to ask you some general questions about you and your family."
+    questions:
+    -   label: Gender of Respondent
+        type: options
+        instructions: (Observe)
+        options:
+        - Male
+        - Female
+        
+    -   label: How old are you? (number of years)
+        type: number
+        min: 18 # TODO: support this!
+        
+    -   label: What is your marital status?
+        type: options
+        options:
+        - Married
+        - Not married
+        - Divorced
+        - Widowed
+        - Separated
+        
+    -   label: Do you have children?
+        type: yesNo
+        subs:
+        -   label: How many children do you have?
+            when: ($parent) == 'yes'
+            type: number
+        
+    -   label: How many siblings do you have?
+        type: number
+        
+    -   label: Is your mother living?
+        type: yesNo
+        
+    -   label: Is your father living?
+        type: yesNo
+        
+    -   label: Were you born in Kibera?
+        type: yesNo
+        subs:
+        -   label: What year did you move to Kibera?
+            when: ($parent) == 'no'
+            type: number
+            
+    
+    

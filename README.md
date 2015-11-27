@@ -11,11 +11,9 @@ Before editing: Make sure the bottom bar shows "Soft Tabs: 4"
 
 # TODO
 
-* Interactivity
-* Sub-questions
 * Compilation / validation
-* Refresh proof
-* Local storage
+* Local storage: survey in progress
+* Local storage: survey results
 * CSV output
 * GPS
 * Start / end time
