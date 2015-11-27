@@ -5,7 +5,7 @@ import yaml
 
 def main():
     try:
-        s = open('baseline-2016.yaml').read().replace('\t', '    ')
+        s = open('baseline-2016.yaml').read().replace('-\t', '-   ').replace('\t', '    ')
         raw = yaml.load(s)
     except yaml.YAMLError as exc:
         print 'Could not load file'
@@ -13,8 +13,11 @@ def main():
         return
     
     # TODO: compilation / validation
+    #    - field types (present and valid)
+    #    - no overlapping keys
     
     json.dump(raw, open('viewer/baseline-2016.json', 'w'))
+    print 'Success!'
     
     
 

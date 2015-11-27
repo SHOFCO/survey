@@ -1,22 +1,21 @@
-prep:
-	title: SHOFCO Kibera Baseline Survey Form
-	questions:
-		Village:
+-   title: SHOFCO Kibera Baseline Survey Form
+    questions:
+		-   label: Village
 			type: options
 			options:
 			- Mashimoni
 			- Lindi
 			- Kianda
 			- Kisumu Ndongo
-		Language interview conducted in:
+        -   label: Language interview conducted in
 			type: options
 			options:
 			- English
 			- Kiswahili
 			- Luo
-			- Other
-consent:
-	title: Informed Consent
+            other: true
+
+-   title: Informed Consent
 	static: |
 		Good morning/afternoon. My name is ($user). I am from Shining Hope for Communities,
 		an organization that offers health and education programs and services for Kibera and
@@ -32,54 +31,52 @@ consent:
 		confidential. If you have any questions or complaints about this interview please
 		contact the Research Manager, Solomon Odero at 0707080734
 		
-qualification:
-	title: Preliminary Questions
+-   title: Preliminary Questions
 	numbered: true
 	questions:
-		SHOFCO Participant:
-			type: yes/no
-			label: "Have you ever participated in SHOFCO services (Kibera School for Girls, JJJ Clinic, SHOFCO Clean Water, SHOFCO Community centers)?"
+		-   label: "Have you ever participated in SHOFCO services (Kibera School for Girls, JJJ Clinic, SHOFCO Clean Water, SHOFCO Community centers)?"
+            type: yes/no
 			subs:
-				when: yes
-				SHOFCO Programs:
-					type: checkboxes
-					label: Which SHOFCO Programs have you and/or your children participated in/utilized?
-					options:
-					- JJJ Clinic
-					- SHOFCO Clean Water Kiosk
-					- Kibera School for Girls
-					- "GS&L"
-					- Urban Movement
-					- Youth Programs
-					- SWEP
-					- Gender Department
-				Ghetto Mirror:
-					type: yes/no
-					label: Have you ever read the Ghetto Mirror?
+			-   label: Which SHOFCO Programs have you and/or your children participated in/utilized?
+				type: checkboxes
+                when: ($parent) == yes
+				options:
+				- JJJ Clinic
+				- SHOFCO Clean Water Kiosk
+				- Kibera School for Girls
+				- "GS&L"
+				- Urban Movement
+				- Youth Programs
+				- SWEP
+				- Gender Department
+            -   label: Have you ever read the Ghetto Mirror?
+                when: ($parent) == yes
+				type: yes/no
 			rules:
 				yes: END
-		Interested:
+                
+		-   label: How many present household members are above 18?
 			type: yes/no
 			label: "Are you [any of present household members] interested in participating in this survey?"
 			rules:
 				no: END
-		Above 18:
+                
+		-   label: How many present household members are above 18?
 			type: number
-			label: How many present household members are above 18?
 			instructions: |
 				Ask for IDs or DOB.
 			subs:
-				when: >1
-				Random Selection:
-					type: random
-					min: 1
-					max: (Above 18)
+			-    label: "Assign each person a number, starting with 1. Choose the below number as your participant."
+				 when: ($parent) > 1
+                 type: random
+				 min: 1
+				 max: ($parent)
 			rules:
 				0: END
-		Agreement:
+
+		-   label: Does the respondent agree to participate?
 			type: yes/no
-			label: Does the respondent agree to participate?
-		Consent Verification:
+			
+		-   label: I certify that I have read the above consent procedure to the participant
 			type: signature
-			label: I certify that I have read the above consent procedure to the participant
 			
