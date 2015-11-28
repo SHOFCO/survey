@@ -278,6 +278,7 @@
         
     -   label: How do you dispose of your garbage?
         instructions: Check all that apply
+        type: options
         options:
         - Throw onto your own land/lot
         - Thrown into a Drain or ditch
@@ -381,3 +382,125 @@
             - Past 2 years
             - More than 2 years ago
             - Can’t remember
+
+##########################################################################
+-   title: "Sanitation"
+    static: Now I’d like to ask you some questions about you and your household’s access to water and sanitation. 
+    questions:
+    -   label: Where do you get your drinking water?
+        type: options
+        options:
+        - Tap
+        - River
+        - SHOFCO Clean Water Kiosk
+        other: true
+
+    -   label: "Do you use the same water source for drinking as you do for other purposes, such as cooking or washing?"
+        type: yesNo 
+        
+    -   label: "How long does it take you to get to your drinking water source, get water, and come back?"
+        type: options
+        options:
+        - Less than 5 minutes 
+        - 5-10 minutes
+        - 10-30 minutes
+        - 30-60 minutes
+        - More than an hour
+        
+    -   label: How often do you treat your drinking water?
+        type: options
+        options:
+        - Never
+        - Rarely
+        - Occasionally
+        - Often
+        - Always
+        subs:
+        -   label: What water treatment methods do you use?
+            when: ($parent) != 'Never'
+            type: checkboxes
+            options:
+            - Boiling
+            - Chlorine
+            - SODIS
+            - Filtration
+            other: true
+
+    -   label: How often do you clean your jerycan with soap and water?
+        type: options
+        options:
+        - Daily
+        - Twice a week
+        - Weekly
+        - Monthly
+        - Never
+        
+    -   label: What type of container do you use to store your drinking water?
+        type: checkboxes
+        options:
+        - Plastic Jerrican
+        - Open plastic pail or bowl
+        - Traditional  clay pot
+        - Plastic Dispenser Container
+        other: true
+        
+    -   label: Do you store your drinking water in a container with a lid?
+        type: yesNo
+        
+    -   label: On average, how long would you store drinking water?
+        type: options
+        options:
+        - Half a day
+        - 1 Day
+        - 2 Days
+        - 3 Days
+        - 4 or more days
+        
+    -   label: What kind of toilet facility do members of your household use?
+        type: checkboxes
+        options:
+        - Pit latrine with concrete slab 
+        - Pit latrine without concrete slab
+        - Biolatrine
+        - Bucket
+        other: true
+        noneOfTheAbove: true
+        
+    -   label: How would you rate the average cleanliness of your toilet facility?
+        type: options
+        options:
+        - Very clean
+        - Clean
+        - Just okay
+        - Dirty
+        - Very Dirty
+        
+    # TODO: link to previous question
+    -   label: "If there is a child under 5 in the house: How do you dispose the stool for your young ones under the age of 5?"
+        type: options
+        options:
+        - Child used Toilet/Latrine
+        - Put into toilet/latrine
+        - Put/Rinsed into drain or ditch
+        - Thrown into Garbage
+        - Left in Open
+        - No children under 5 in house
+        other: true
+        
+    -   label: When do members of your household wash their hands (check all that apply)? 
+        type: checkboxes
+        options:
+        - After work
+        - Before/After eating
+        - After using the bathroom
+        - Before cooking
+        - After helping infants use the bathroom
+        other: true
+        
+    -   label: What method do members of your household most often use to wash their hands?
+        type: options
+        options:
+        - With a cloth
+        - With water
+        - With soap and water
+        other: true
