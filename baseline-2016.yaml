@@ -46,11 +46,11 @@
     questions:
         -   label: "Have you ever participated in SHOFCO services (Kibera School for Girls, JJJ Clinic, SHOFCO Clean Water, SHOFCO Community centers)?"
             type: yesNo
-            endSurveyWhen: ($value) == 'yes'
+            endSurveyWhen: ($value) == 'Yes'
             subs:
             -   label: Which SHOFCO Programs have you and/or your children participated in/utilized?
                 type: checkboxes
-                when: ($parent) == 'yes'
+                when: ($parent) == 'Yes'
                 options:
                 - JJJ Clinic
                 - SHOFCO Clean Water Kiosk
@@ -64,12 +64,12 @@
                 - Community Library
                 - SHOFCO Daycare
             -   label: Have you ever read the Ghetto Mirror?
-                when: ($parent) == 'yes'
+                when: ($parent) == 'Yes'
                 type: yesNo
 
         -   label: "Are you [any of present household members] interested in participating in this survey?"
             type: yesNo
-            endSurveyWhen: ($value) == 'no'
+            endSurveyWhen: ($value) == 'No'
 
         -   label: How many participating household members are above 18?
             type: number
@@ -85,7 +85,7 @@
 
         -   label: Does the respondent agree to participate?
             type: yesNo
-            endSurveyWhen: ($value) == 'no'
+            endSurveyWhen: ($value) == 'No'
 
         -   label: I certify that I have read the above consent procedure to the participant
             type: signature
@@ -131,7 +131,7 @@
         type: yesNo
         subs:
         -   label: How many children do you have?
-            when: ($parent) == 'yes'
+            when: ($parent) == 'Yes'
             type: number
 
     -   label: How many siblings do you have?
@@ -147,7 +147,7 @@
         type: yesNo
         subs:
         -   label: What year did you move to Kibera?
-            when: ($parent) == 'no'
+            when: ($parent) == 'No'
             type: number
 
 
@@ -213,10 +213,10 @@
         type: yesNo
         subs:
         -   label: How much do you save generally per month?
-            when: ($parent) == 'yes'
+            when: ($parent) == 'Yes'
             type: number
         -   label: Why are you not able to save?
-            when: ($parent) == 'no'
+            when: ($parent) == 'No'
             type: text
             rows: 3
     
@@ -227,11 +227,11 @@
         type: yesNo
         subs:
         -   label: Do you think you have the training necessary for you to find employment that you want?
-            when: ($parent) == 'no'
+            when: ($parent) == 'No'
             type: yesNo
             subs:
             -   label: What is preventing you from getting the necessary training?
-                when: ($parent) == 'no'
+                when: ($parent) == 'No'
                 type: options
                 options:
                 - Lack of money
@@ -239,9 +239,10 @@
                 - Spouse doesn't approve
                 other: true
             -   label: What is preventing you from getting a job?
-                when: ($parent) == 'yes'
+                when: ($parent) == 'Yes'
                 type: text
                 rows: 3
+
 
 ##########################################################################
 -   title: Economic
@@ -264,3 +265,119 @@
         - Kerosene
         other: true
         
+    -   label: Where do you cook?
+        instructions: Check all that apply
+        type: checkboxes
+        options:
+        - Outside
+        - Inside house in a room with a window
+        - Inside house in an enclosed space with no window
+        - In separate kitchen room with window
+        - In separate kitchen room without window
+        other: true
+        
+    -   label: How do you dispose of your garbage?
+        instructions: Check all that apply
+        options:
+        - Throw onto your own land/lot
+        - Thrown into a Drain or ditch
+        - Left in the open
+        - Burned
+        - Paid people to Pick-up
+        other: true
+        
+
+##########################################################################
+-   title: "Health & Medical Care"
+    static: |
+        Now I’d like to ask you some questions about your life and health. Some of these
+        questions are very personal. I would like to remind you that all of your answers will
+        be kept completely anonymous.
+    
+    questions:
+    -   label: When was the last time you or someone in your family needed medical care?
+        type: options
+        options:
+        - This week
+        - Last Week
+        - This Month
+        - In the past 2 months
+        - In the past 6 months
+        - In the past year
+        - More than a year ago
+        - More than 2 years ago
+        
+    -   label: What was the reason?
+        type: text
+        rows: 2
+        
+    -   label: Where do you usually receive medical care?
+        type: options
+        options:
+        - CDC
+        - MSF
+        - JJJ (SHOFCO) Clinic
+        - AMREF
+        - Langata District Hospital
+        - St. Mary’s Hospital
+        - Mbagathi District Hospital
+        other: true
+        
+    -   label: How many times in the past 3 months has someone in your household been treated for diarrhea?
+        type: options
+        options:
+        - Zero
+        - Once
+        - Twice
+        - Thrice
+        - Four times
+        - Five times
+        - More than Five times
+        subs:
+        -   label: What treatment did you use (Check all that apply)
+            when: ($parent) != 'Zero'
+            type: checkboxes
+            options:
+            - Purchased Oral rehydration salts from Chemist
+            - Purchased Zinc from a Chemist
+            - Purchased Antibiotics from the Chemist
+            - Went to clinic or hospital
+            - Changed their food/water
+            - Waited and it went away on its own
+            other: true
+        -   label: "To your knowledge, state the main causes of diarrhea"
+            when: ($parent) != 'Zero'
+            type: text
+            rows: 3
+            
+    -   label: Do you know anyone living with HIV?
+        type: yesNo
+        
+    -   label: "If a member of your family became infected with HIV, would you want to keep it a secret?"
+        type: options
+        options:
+        - Yes
+        - No
+        - Not Sure
+        
+    -   label: Do you think those who are HIV+ should declare their status to family members or public?
+        type: options
+        options:
+        - Yes
+        - No
+        - Not Sure
+        
+    -   label: Have you ever been tested for HIV? 
+        type: yesNo
+        subs:
+        -   label: Wen was the last time you were tested?
+            when: ($parent) == 'Yes'
+            type: options
+            options:
+            - Past Month
+            - Past 3 months
+            - Past 6 months
+            - Past year
+            - Past 2 years
+            - More than 2 years ago
+            - Can’t remember

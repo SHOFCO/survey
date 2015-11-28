@@ -164,7 +164,7 @@ function renderYesNo(div, question, config) {
     div.append(' ');
     yes.change(function() {
         if ($(this).is(':checked')) {
-            question.setValue('yes');
+            question.setValue('Yes');
         }
     });
     
@@ -173,7 +173,7 @@ function renderYesNo(div, question, config) {
     div.append($('<label>').text('No').attr('for', question.id + '-no'));
     no.change(function() {
         if ($(this).is(':checked')) {
-            question.setValue('no');
+            question.setValue('No');
         }
     });
 }
