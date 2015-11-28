@@ -29,7 +29,8 @@ function itemAt(arr, index) {
 
 function render(pages) {
     var state = {
-        questions: []
+        questions: [],
+        references: {}
     };
     window.debugState = state;
     
@@ -76,14 +77,14 @@ function last(arr) {
     return arr[arr.length - 1];
 }
 
-function renderQuestions(state, div, questions, opt_parent) {
+function renderQuestions(state, div, pageConfig, questions, opt_parent) {
     for (var i = 0; i < questions.length; i++) {
         var q = questions[i];
-        div.append(renderQuestion(state, q));
+        div.append(renderQuestion(state, q, pageConfig));
         last(state.questions).parent = opt_parent;
         
         if (q.subs) {
-            renderQuestions(state, div, q.subs, last(state.questions));
+            renderQuestions(state, div, pageConfig, q.subs, last(state.questions));
         }
     }
 }
@@ -98,8 +99,53 @@ function renderPage(state, page) {
         }
     }
     if (page.questions) {
-        renderQuestions(state, div, page.questions);
+        renderQuestions(state, div, page, page.questions);
+    } else {
+        div.addClass('staticOnly');
     }
+
+    return div;
+}
+
+function isValue(value) {
+    return value !== '' && value !== undefined && value !== null;
+}
+
+function renderQuestion(state, config, pageConfig) {
+    var question = {
+        number: state.questions.length,
+        id: 'question' + state.questions.length,
+        config: config,
+        pageConfig: pageConfig
+    };
+    state.questions.push(question);
+    question.setValue = function(value) {
+        question.value = isValue(value) ? value : undefined;
+        if (config.referenceAs) {
+            state.references[config.referenceAs] = question.value;
+        }
+        div.trigger('question:change');
+    };
+    question.interpolate = function(s) {
+        return s.replace(/\(([^)]+)\)/g, function(_, varName) {
+            var replacement;
+            switch (varName) {
+                case '$parent': replacement = question.parent.value; break;
+                case '$value': replacement = question.value; break;
+                default: replacement = state.references[varName];
+            }
+            return JSON.stringify(replacement);
+        });
+    }
+    question.interpolatedEval = function(s) {
+        return eval(question.interpolate(s));
+    };
+
+    var div = $('<div class="question ' + config.type + '">');
+    div.append($('<h2>').text(config.label));
+    RENDER[config.type](div, question, config);
+    question.div = div;
+    div.hide();
 
     return div;
 }
@@ -117,9 +163,16 @@ function setVisibility(state, scroll) {
             endComplete = true;
             break;
         }
-        if (!question.config.when || question.interpolatedEval(question.config.when)) {
+        var shouldShow = true;
+        if (question.config.when) {
+            shouldShow = question.interpolatedEval(question.config.when);
+        }
+        if (shouldShow && question.pageConfig.when) {
+            shouldShow = question.interpolatedEval(question.pageConfig.when);
+        }
+        if (shouldShow) {
             question.div.show();
-            question.div.closest('div.page').show().prevAll('div.page').show();
+            question.div.closest('div.page').show().prevAll('div.page.staticOnly').show();
             if (question.value === undefined) {
                 break;
             }
@@ -140,40 +193,6 @@ function setVisibility(state, scroll) {
     for (i = i + 1; i < state.questions.length; i++) {
         state.questions[i].div.hide();
     }
-}
-
-function isValue(value) {
-    return value !== '' && value !== undefined && value !== null;
-}
-
-function renderQuestion(state, config) {
-    var question = {
-        number: state.questions.length,
-        id: 'question' + state.questions.length,
-        config: config
-    };
-    state.questions.push(question);
-    question.setValue = function(value) {
-        question.value = isValue(value) ? value : undefined;
-        div.trigger('question:change');
-    };
-    question.interpolate = function(s) {
-        if (question.parent) {
-            s = s.replace('($parent)', JSON.stringify(question.parent.value));
-        }
-        return s.replace('($value)', JSON.stringify(question.value));
-    }
-    question.interpolatedEval = function(s) {
-        return eval(question.interpolate(s));
-    };
-
-    var div = $('<div class="question ' + config.type + '">');
-    div.append($('<h2>').text(config.label));
-    RENDER[config.type](div, question, config);
-    question.div = div;
-    div.hide();
-
-    return div;
 }
 
 function renderYesNo(div, question, config) {
