@@ -17,15 +17,34 @@ $(document).ready(function() {
     });
 });
 
+function itemAt(arr, index) {
+    index = parseInt(index, 10);
+    if (index < 0) {
+        index += arr.length;
+    } else {
+        index -= 1;
+    }
+    return arr[index];
+}
+
 function render(pages) {
     var state = {
         questions: []
     };
     window.debugState = state;
     
-    if (location.search == '?debugLast') {
-        pages = [last(pages)];
-        pages[0].questions = [last(pages[0].questions)];
+    if (location.search.substr(0, 8) == '?filter=') {
+        var filter = location.search.substr(8);
+        var parts = filter.split('+');
+        var newPages = [];
+        for (var i = 0; i < parts.length; i++) {
+            var part = parts[i].split(':');
+            newPages.push(itemAt(pages, part[0]));
+            if (part[1]) {
+                last(newPages).questions = [itemAt(last(newPages).questions, part[1])];
+            }
+        }
+        pages = newPages;
     }
     
     for (var i = 0; i < pages.length; i++) {
