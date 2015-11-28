@@ -15,6 +15,7 @@ def main():
     # TODO: compilation / validation
     #    - field types (present and valid)
     #    - no overlapping keys
+    #    - correct sub-fields present (schema validation)
     
     json.dump(raw, open('viewer/baseline-2016.json', 'w'))
     print 'Success!'

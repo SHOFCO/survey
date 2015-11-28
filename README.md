@@ -10,11 +10,12 @@
 
 * Page level "when"
 * When conditions that refer to named fields
+* Render instructions
 * Question skipping
-* Compilation / validation
-* Local storage: survey in progress
 * Local storage: survey results
 * CSV output
 * GPS
 * Start / end time
 * Users / PINs
+* Local storage: survey in progress
+* Compilation / validation
