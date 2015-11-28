@@ -42,7 +42,15 @@ function render(pages) {
             var part = parts[i].split(':');
             newPages.push(itemAt(pages, part[0]));
             if (part[1]) {
-                last(newPages).questions = [itemAt(last(newPages).questions, part[1])];
+                var modifyingPage = last(newPages);
+                var subParts = part[1].split(',');
+                console.log(subParts);
+                var newQuestions = [];
+                for (var j = 0; j < subParts.length; j++) {
+                    newQuestions.push(itemAt(modifyingPage.questions, subParts[j]));
+                }
+                console.log(newQuestions);
+                modifyingPage.questions = newQuestions;
             }
         }
         pages = newPages;
