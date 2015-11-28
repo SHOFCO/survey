@@ -8,8 +8,7 @@
 
 # TODO
 
-* Page level "when"
-* When conditions that refer to named fields
+* Remaining sections
 * Render instructions
 * Question skipping
 * Local storage: survey results
