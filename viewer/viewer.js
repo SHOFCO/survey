@@ -185,6 +185,9 @@ function renderQuestion(state, config, pageConfig, level) {
 
     var div = $('<div class="question ' + config.type + ' level' + level + '">');
     div.append($('<h2>').text(config.label));
+    if (config.instructions) {
+        div.append($('<div class="instructions">').text(config.instructions));
+    }
     RENDER[config.type](div, question, config);
     question.div = div;
     div.hide();

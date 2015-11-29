@@ -9,11 +9,16 @@
 
 # TODO
 
+Demo blockers:
+
 * Remaining sections (2 hours)
-* Render instructions (15 minutes)
 * Question and section skipping (1 hour)
 * Local storage: survey results (1 hour)
 * CSV output (1 hour)
 * GPS + start / end time (1 hour)
 * Users / PINs (1 hour)
+
+Launch blockers:
+
 * Local storage: survey in progress (1 hour)
+* Number field min/max support + validation
