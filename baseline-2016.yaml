@@ -724,3 +724,34 @@
     -   label: Insult you or make you feel bad about yourself?
         type: yesNo
         specialSub: frequency
+
+
+##########################################################################
+-   title: Male Only Section
+    static: |
+        Now I would like to talk about family planning - the various ways or methods that a
+        couple can use to delay or avoid a pregnancy.
+    when: (gender) == 'Male'
+    questions:
+    -   label: Does your wife/partner use family planning?
+        when: (maritalStatus) == 'Married'
+        type: options
+        options:
+        -   "Yes"
+        -   "No"
+        -   "Don't Know"
+
+    -   label: Do you/Would you approve or disapprove of your wife/partner using family planning to prevent pregnancy?
+        type: options
+        options:
+        -   Approve
+        -   Disapprove
+        -   Don't know
+    
+    -   label: "Would you say that your wife/partner use of family planning is/should be mainly your decision, mainly your wife’s/partner’s decision, or a joint decision?"
+        type: options
+        options:
+        -   Mainly respondent
+        -   Mainly wife / partner
+        -   Joint decision
+        other: true
