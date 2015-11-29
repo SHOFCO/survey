@@ -82,6 +82,8 @@ def main():
             
     # TODO: compilation / validation
     #    - no overlapping keys
+    #    - check for raw true or false in options lists
+    #           - this happens when Yes or No is an option instead of "Yes" or "No"
 
     if errors:
         print '%d Errors!' % errors

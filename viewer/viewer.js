@@ -44,12 +44,10 @@ function render(pages) {
             if (part[1]) {
                 var modifyingPage = last(newPages);
                 var subParts = part[1].split(',');
-                console.log(subParts);
                 var newQuestions = [];
                 for (var j = 0; j < subParts.length; j++) {
                     newQuestions.push(itemAt(modifyingPage.questions, subParts[j]));
                 }
-                console.log(newQuestions);
                 modifyingPage.questions = newQuestions;
             }
         }
@@ -119,6 +117,17 @@ function isValue(value) {
     return value !== '' && value !== undefined && value !== null;
 }
 
+function countCheckboxes(obj) {
+    var count = 0;
+    for (var key in obj) {
+        if (obj[key]) {
+            count++;
+        }
+    }
+    console.log(count, obj);
+    return count;
+}
+
 function renderQuestion(state, config, pageConfig) {
     var question = {
         number: state.questions.length,
@@ -137,16 +146,31 @@ function renderQuestion(state, config, pageConfig) {
     question.interpolate = function(s) {
         return s.replace(/\(([^)]+)\)/g, function(_, varName) {
             var replacement;
+            var filters = varName.split(':');
+            varName = filters[0];
             switch (varName) {
                 case '$parent': replacement = question.parent.value; break;
                 case '$value': replacement = question.value; break;
                 default: replacement = state.references[varName];
             }
+            for (var i = 1; i < filters.length; i++) {
+                switch (filters[i]) {
+                    case 'countCheckboxes': replacement = countCheckboxes(replacement); break;
+                    default: throw 'Bad filter: ' + filters[i];
+                }
+            }
             return JSON.stringify(replacement);
         });
     }
     question.interpolatedEval = function(s) {
-        return eval(question.interpolate(s));
+        try {
+            return eval(question.interpolate(s));
+        } catch (e) {
+            console.log('Error evaluating: ' + JSON.stringify(s));
+            console.log('After interpolation: ' + JSON.stringify(question.interpolate(s)));
+            console.error(e);
+            throw e;
+        }
     };
 
     var div = $('<div class="question ' + config.type + '">');

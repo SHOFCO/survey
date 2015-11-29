@@ -121,6 +121,7 @@
 
     -   label: What is your marital status?
         type: options
+        referenceAs: maritalStatus
         options:
         - Married
         - Not married
@@ -593,5 +594,83 @@
         - Withdrawal
         - Herbs
         other: true
+        noneOfTheAbove: true
         
-    # TODO: more
+    -   label: Have you EVER used any of the following to prevent or delay pregnancy?
+        instructions: Read options out loud
+        type: checkboxes
+        referenceAs: familyPlanningMethods
+        options:
+        - Pills / Tablets
+        - Injectables
+        - Implants
+        - IUD
+        - Diaphragm / Foam / Jelly
+        - Female sterilization
+        - Male sterilization
+        - Condoms
+        - “Safe days”
+        - Withdrawal
+        - Herbs
+        other: true
+        noneOfTheAbove: true
+        subs:
+        -   label: How do you prevent unwanted pregnancies?
+            when: ($parent:countCheckboxes) == 0
+            type: text
+            rows: 3
+            # TODO: would any responses here be considered family planning strategies
+            # for enabling the next section?
+            
+##########################################################################
+-   title: Female Respondents That Have Used Family Planning Only
+    when: (familyPlanningMethods:countCheckboxes) > 0
+    questions:
+    -   label: Are you CURRENTLY using any of the following to prevent or delay pregnancy?
+        type: checkboxes
+        options:
+        - Pills / Tablets
+        - Injectables
+        - Implants
+        - IUD
+        - Diaphragm / Foam / Jelly
+        - Female sterilization
+        - Male sterilization
+        - Condoms
+        - “Safe days”
+        - Withdrawal
+        - Herbs
+        other: true
+        noneOfTheAbove: true
+    
+    -   label: Why do/did you want to delay or avoid getting pregnant (check all that apply)?
+        type: checkboxes
+        options:
+        - Not ready to have children
+        - To provide space/intervals between children
+        - Can’t/Couldn’t afford another child
+        other: true
+    
+    -   label: "Would you say that using contraceptive is mainly your decision, mainly your husband’s/partner’s decision, or did you both decide together? (DHS)"
+        type: options
+        options:
+        - Mainly respondent’s decision
+        - Mainly husband/partner
+        - Joint decision with husband/partner
+        other: true
+    
+    -   label: "Does your husband/partner know that you are using family planning? (DHS)"
+        when: (maritalStatus) == 'Married'
+        type: options
+        options:
+        - "Yes"
+        - "No"
+        - Don't Know
+        subs:
+        -   label: Does your husband/partner approve of you using family planning?
+            when: ($parent) == 'Yes'
+            type: options
+            options:
+            - Approves
+            - Disapproves
+            - I don't know his opinion
