@@ -11,6 +11,7 @@
 * Remaining sections
 * Render instructions
 * Question skipping
+* Section skipping
 * Local storage: survey results
 * CSV output
 * GPS

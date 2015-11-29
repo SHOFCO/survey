@@ -63,3 +63,15 @@ div.table tbody input {
 textarea {
     width: 100%;
 }
+
+.question.level2 {
+    margin-left: 2em;
+}
+
+.question.level3 {
+    margin-left: 4em;
+}
+
+.question.level4 {
+    margin-left: 6em;
+}

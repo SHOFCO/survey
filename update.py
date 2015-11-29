@@ -7,7 +7,7 @@ import yaml
 SCHEMA = {
     '*': {
         'required': {'label', 'type'},
-        'allowed': {'instructions', 'subs', 'when', 'endSurveyWhen', 'referenceAs'}
+        'allowed': {'instructions', 'subs', 'when', 'endSurveyWhen', 'referenceAs', 'specialSub'}
     },
     'yesNo': {
     },

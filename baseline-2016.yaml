@@ -674,3 +674,53 @@
             - Approves
             - Disapproves
             - I don't know his opinion
+
+
+##########################################################################
+-   title: Domestic Violence
+    static: |
+        When two people live together, they usually share good and bad moments.
+        I would now like to ask you some questions about your current and past relationships.
+        If anyone interrupts us I will change the topic of conversation. I would again like to
+        assure you that your answers will be kept in secret, and that you do not have to answer
+        questions that you do not want to. May I continue?
+        
+        Does / did your (current / last) husband / partner ever:
+    when: (gender) == 'Female'
+    questions:
+    -   label: "Push you, shake you, or throw something at you?"
+        type: yesNo
+        specialSub: frequency
+    -   label: Slap you?
+        type: yesNo
+        specialSub: frequency
+    -   label: Twist your arm or pull your hair?
+        type: yesNo
+        specialSub: frequency
+    -   label: Punch you with his fist or with something that could hurt you?
+        type: yesNo
+        specialSub: frequency
+    -   label: Kick you or drag you or beat you up?
+        type: yesNo
+        specialSub: frequency
+    -   label: Try to choke you or burn you on purpose?
+        type: yesNo
+        specialSub: frequency
+    -   label: "Threaten or attack you with a knife, gun, or any other weapon?"
+        type: yesNo
+        specialSub: frequency
+    -   label: Physically force you to have sexual intercourse even when you did not want to?
+        type: yesNo
+        specialSub: frequency
+    -   label: Force you to perform any sexual acts you did not want to?
+        type: yesNo
+        specialSub: frequency
+    -   label: Say or do something to humiliate you in front of others?
+        type: yesNo
+        specialSub: frequency
+    -   label: Threaten to hurt or harm you or someone close to you?
+        type: yesNo
+        specialSub: frequency
+    -   label: Insult you or make you feel bad about yourself?
+        type: yesNo
+        specialSub: frequency

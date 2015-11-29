@@ -83,14 +83,24 @@ function last(arr) {
     return arr[arr.length - 1];
 }
 
-function renderQuestions(state, div, pageConfig, questions, opt_parent) {
+function renderQuestions(state, div, pageConfig, questions, level, opt_parent) {
     for (var i = 0; i < questions.length; i++) {
         var q = questions[i];
-        div.append(renderQuestion(state, q, pageConfig));
+        div.append(renderQuestion(state, q, pageConfig, level));
         last(state.questions).parent = opt_parent;
         
+        if (q.specialSub == 'frequency') {
+            q.subs = q.subs || [];
+            q.subs.unshift({
+                label: "How often has this occurred in the last 12 months?",
+                when: "($parent) == 'Yes'",
+                type: "options",
+                options: ["Often", "Sometimes", "Rarely", "Has not occurred in the last 12 months"]
+            });
+            delete q.specialSub;
+        }
         if (q.subs) {
-            renderQuestions(state, div, pageConfig, q.subs, last(state.questions));
+            renderQuestions(state, div, pageConfig, q.subs, level + 1, last(state.questions));
         }
     }
 }
@@ -105,7 +115,7 @@ function renderPage(state, page) {
         }
     }
     if (page.questions) {
-        renderQuestions(state, div, page, page.questions);
+        renderQuestions(state, div, page, page.questions, 1);
     } else {
         div.addClass('staticOnly');
     }
@@ -128,7 +138,7 @@ function countCheckboxes(obj) {
     return count;
 }
 
-function renderQuestion(state, config, pageConfig) {
+function renderQuestion(state, config, pageConfig, level) {
     var question = {
         number: state.questions.length,
         id: 'question' + state.questions.length,
@@ -173,7 +183,7 @@ function renderQuestion(state, config, pageConfig) {
         }
     };
 
-    var div = $('<div class="question ' + config.type + '">');
+    var div = $('<div class="question ' + config.type + ' level' + level + '">');
     div.append($('<h2>').text(config.label));
     RENDER[config.type](div, question, config);
     question.div = div;
