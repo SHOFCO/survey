@@ -11,7 +11,6 @@
 
 Demo blockers:
 
-* Remaining sections (2 hours)
 * Question and section skipping (1 hour)
 * Local storage: survey results (1 hour)
 * CSV output (1 hour)
@@ -20,5 +19,6 @@ Demo blockers:
 
 Launch blockers:
 
+* Remaining sections (2 hours)
 * Local storage: survey in progress (1 hour)
 * Number field min/max support + validation

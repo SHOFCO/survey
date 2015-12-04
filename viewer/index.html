@@ -4,9 +4,32 @@
 <head>
     <title>Survey</title>
     <script src="jquery-1.11.3.js"></script>
+    <script src="storage.js"></script>
     <script src="viewer.js"></script>
     <link href="style.css" rel="stylesheet"/>
+    <style type="text/css">
+    body > div { display: none; }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body>
+    <div id="userPicker"></div>
+    <div id="createUser">
+        <form method="GET" action="">
+            <h1>New User</h1>
+
+            <label for="createUserName">Name: </label>
+            <input type="text" id="createUserName"/>
+
+            <label for="createUserName">PIN: </label>
+            <input type="number" id="createUserPin"/>
+
+            <label for="createUserName">PIN (again): </label>
+            <input type="number" id="createUserPinVerify"/>
+
+            <button>Create user!</button>
+        </form>
+    </div>
+    <div id="survey"></div>
 </body>
 </html>

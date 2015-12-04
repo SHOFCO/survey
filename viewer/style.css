@@ -83,3 +83,32 @@ textarea {
 .question.level4 {
     margin-left: 6em;
 }
+
+#createUser {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 90%;
+    height: 90%;
+    background: white;
+    padding: 5%;
+}
+
+#createUser input[type=number] {
+    -webkit-text-security: disc;
+}
+
+#createUser label {
+    display: block;
+    margin-bottom: 0.25em;
+}
+
+#createUser input {
+    margin-bottom: 1em;
+    width: 95%;
+}
+
+#userPicker a {
+    display: block;
+    margin: 0.25em 0;
+}

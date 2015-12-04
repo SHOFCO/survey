@@ -11,11 +11,64 @@ RENDER = {
     'table': renderTable
 }
 
+window.loggedInUser = null;
+
 $(document).ready(function() {
+    $('#createUser form').submit(function(e) {
+        e.preventDefault();
+        var name = $('#createUserName').val();
+        var pin = $('#createUserPin').val();
+        var pinVerify = $('#createUserPinVerify').val();
+        if (!name) {
+            alert('Name is required');
+            $('#createUserName').select();
+        } else if (!pin) {
+            alert('Pin is required');
+            $('#createUserPin').select();
+        } else if (pin.length < 4) {
+            alert('Pin length must be at least 4');
+            $('#createUserPin').select();
+        } else if (pin != pinVerify) {
+            alert('Pin and verification must match');
+            $('#createUserPin').select();
+        } else {
+            createUser(name, pin);
+            renderUserPicker();
+            $('#createUser').hide();
+        }
+    });
+    renderUserPicker();
     $.getJSON('baseline-2016.json', function(pages) {
         render(pages);
+        $('#userPicker').show();
     });
 });
+
+function renderUserPicker() {
+    var users = getUsers();
+    var root = $('#userPicker');
+    root.empty();
+    var userDiv = $('<div id="userList">');
+    for (var i = 0; i < users.length; i++) {
+        userDiv.append($('<a href="#">').text(users[i].name).click(function(user) {
+            var pin = prompt('Enter pin for ' + user.name);
+            if (pin == user.pin) {
+                window.loggedInUser = user;
+                $('#userPicker').hide();
+                $('#survey').show();
+            } else {
+                alert('Incorrect PIN');
+            }
+        }.bind(this, users[i])));
+    }
+    root.append(userDiv);
+    root.append($('<br>'))
+    root.append($('<a href="#">').text('New user').click(function() {
+        $('#createUser input').val('');
+        $('#createUser').show();
+        $('#createUserName').select();
+    }));
+}
 
 function itemAt(arr, index) {
     index = parseInt(index, 10);
@@ -54,12 +107,13 @@ function render(pages) {
         pages = newPages;
     }
     
+    var root = $('#survey');
     for (var i = 0; i < pages.length; i++) {
-        $(document.body).append(renderPage(state, pages[i]));
+        $(root).append(renderPage(state, pages[i]));
     }
     
     state.end = $('<div class="end"><a href="#">Complete This Survey</a></div>').hide();
-    $(document.body).append(state.end);
+    $(root).append(state.end);
     
     setVisibility(state);
     $('div.question').on('question:change', function() {
@@ -275,9 +329,12 @@ function renderText(div, question, config) {
 function renderSignature(div, question, config) {
     div.append($('<a href="#">').text('Sign').click(function(e) {
         e.preventDefault();
-        // TODO: PIN entry
-        $(this).replaceWith($('<div class="signatureResult">').text('Signed!'));
-        question.setValue('signed');
+        if (prompt(window.loggedInUser.name + ', please enter your PIN:') == window.loggedInUser.pin) {
+            $(this).replaceWith($('<div class="signatureResult">').text('Signed!'));
+            question.setValue('signed');
+        } else {
+            alert('Incorrect pin');
+        }
     }));
 }
 
