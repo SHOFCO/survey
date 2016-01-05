@@ -10,3 +10,9 @@ function getUrlParameter(name) {
 function last(arr) {
     return arr[arr.length - 1];
 }
+
+function csvUrl(keys, rows) {
+    // TODO: this
+    var csv = '';
+    return 'data:text/csv;base64,' + btoa(csv);
+}
