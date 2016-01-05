@@ -11,6 +11,9 @@ RENDER = {
     'table': renderTable
 }
 
+// Marker object for skipped questions.
+SKIPPED = new Object();
+
 window.loggedInUser = null;
 window.pages = null;
 
@@ -99,7 +102,7 @@ function renderPages() {
     
     var filter = getUrlParameter('filter');
     if (filter) {
-        var parts = filter.split(' ');
+        var parts = filter.split('+');
         var newPages = [];
         for (var i = 0; i < parts.length; i++) {
             var part = parts[i].split(':');
@@ -142,10 +145,6 @@ function scrollPast(selector) {
         {scrollTop: selector.offset().top + selector.height()}, 
         400, 
         'swing');
-}
-
-function last(arr) {
-    return arr[arr.length - 1];
 }
 
 function renderQuestions(state, div, pageConfig, questions, level, opt_parent) {
@@ -210,7 +209,6 @@ function countCheckboxes(obj) {
             count++;
         }
     }
-    console.log(count, obj);
     return count;
 }
 
@@ -240,6 +238,9 @@ function renderQuestion(state, config, pageConfig, level) {
                 case '$value': replacement = question.value; break;
                 default: replacement = state.references[varName];
             }
+            if (replacement == SKIPPED) {
+                replacement = undefined;
+            }
             for (var i = 1; i < filters.length; i++) {
                 switch (filters[i]) {
                     case 'countCheckboxes': replacement = countCheckboxes(replacement); break;
@@ -262,6 +263,21 @@ function renderQuestion(state, config, pageConfig, level) {
 
     var div = $('<div class="question ' + config.type + ' level' + level + '">');
     div.append($('<h2>').text(config.label));
+    if (!config.unskippable) {
+        div.append($('<a href="#">').text('Skip').addClass('skip').click(function(e) {
+            e.preventDefault();
+            div.find('input, select, textarea').prop('disabled', !div.hasClass('skipped'));
+            if (div.hasClass('skipped')) {
+                div.find('.skip').text('Skip');
+                div.removeClass('skipped');
+                question.setValue(undefined);
+            } else {
+                div.find('.skip').text('Skipped');
+                div.addClass('skipped');
+                question.setValue(SKIPPED);
+            }
+        }));
+    }
     if (config.instructions) {
         div.append($('<div class="instructions">').text(config.instructions));
     }
@@ -286,7 +302,14 @@ function setVisibility(state, scroll) {
             break;
         }
         var shouldShow = true;
-        if (question.config.when) {
+        var ancestor = question.parent;
+        while (ancestor && shouldShow) {
+            if (ancestor.value == SKIPPED) {
+                shouldShow = false;
+            }
+            ancestor = ancestor.parent;
+        }
+        if (shouldShow && question.config.when) {
             shouldShow = question.interpolatedEval(question.config.when);
         }
         if (shouldShow && question.pageConfig.when) {

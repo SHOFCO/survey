@@ -13,6 +13,7 @@
             - Makongeni
             - Gatwekera
             other: true
+            unskippable: true
 
         -   label: Language interview conducted in
             type: options
@@ -21,6 +22,7 @@
             - Kiswahili
             - Luo
             other: true
+            unskippable: true
 
 ##########################################################################
 -   title: Informed Consent
@@ -66,10 +68,12 @@
             -   label: Have you ever read the Ghetto Mirror?
                 when: ($parent) == 'Yes'
                 type: yesNo
+            unskippable: true
 
         -   label: "Are you [any of present household members] interested in participating in this survey?"
             type: yesNo
             endSurveyWhen: ($value) == 'No'
+            unskippable: true
 
         -   label: How many participating household members are above 18?
             type: number
@@ -82,13 +86,16 @@
                  type: random
                  min: 1
                  max: ($parent)
+            unskippable: true
 
         -   label: Does the respondent agree to participate?
             type: yesNo
             endSurveyWhen: ($value) == 'No'
+            unskippable: true
 
         -   label: I certify that I have read the above consent procedure to the participant
             type: signature
+            unskippable: true
 
 
 ##########################################################################

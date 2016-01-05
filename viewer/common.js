@@ -6,3 +6,7 @@ function getUrlParameter(name) {
     }
     return decodeURIComponent(results[1])
 }
+
+function last(arr) {
+    return arr[arr.length - 1];
+}

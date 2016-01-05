@@ -19,7 +19,7 @@ div.page {
 }
 
 h1, h2 {
-    margin: 0.75em 0 0.25em 0;
+    margin: 0em 0 0.25em 0;
     padding: 0;
 }
 
@@ -70,6 +70,32 @@ div.table tbody input {
 
 textarea {
     width: 100%;
+}
+
+.question {
+    background: #eee;
+    padding: 0.5em;
+    margin: 0.5em 0;
+    border: 3px solid #e3e3e3;
+    position: relative;
+}
+
+.question.skipped * {
+    opacity: 0.5;
+}
+
+.question.skipped a.skip {
+    opacity: 1.0;
+    color: #999;
+}
+
+.question a.skip {
+    position: absolute;
+    top: 0.5em;
+    right: 1em;
+    color: #aaa;
+    text-decoration: none;
+    font-weight: bold;
 }
 
 .question.level2 {
