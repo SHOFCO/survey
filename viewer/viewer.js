@@ -12,6 +12,7 @@ RENDER = {
 }
 
 window.loggedInUser = null;
+window.pages = null;
 
 $(document).ready(function() {
     $('#createUser form').submit(function(e) {
@@ -37,12 +38,22 @@ $(document).ready(function() {
             $('#createUser').hide();
         }
     });
-    renderUserPicker();
     $.getJSON('baseline-2016.json', function(pages) {
-        render(pages);
+        window.pages = pages;
+        renderUserPicker();
         $('#userPicker').show();
+        if (getUrlParameter('user')) {
+            selectUser(getUsers()[window.parseInt(getUrlParameter('user'), 10)]);
+        }
     });
 });
+
+function selectUser(user) {
+    window.loggedInUser = user;
+    $('#userPicker').hide();
+    renderPages();
+    $('#survey').show();
+}
 
 function renderUserPicker() {
     var users = getUsers();
@@ -53,9 +64,7 @@ function renderUserPicker() {
         userDiv.append($('<a href="#">').text(users[i].name).click(function(user) {
             var pin = prompt('Enter pin for ' + user.name);
             if (pin == user.pin) {
-                window.loggedInUser = user;
-                $('#userPicker').hide();
-                $('#survey').show();
+                selectUser(user);
             } else {
                 alert('Incorrect PIN');
             }
@@ -80,16 +89,17 @@ function itemAt(arr, index) {
     return arr[index];
 }
 
-function render(pages) {
+function renderPages() {
+    var pages = window.pages;
     var state = {
         questions: [],
         references: {}
     };
     window.debugState = state;
     
-    if (location.search.substr(0, 8) == '?filter=') {
-        var filter = location.search.substr(8);
-        var parts = filter.split('+');
+    var filter = getUrlParameter('filter');
+    if (filter) {
+        var parts = filter.split(' ');
         var newPages = [];
         for (var i = 0; i < parts.length; i++) {
             var part = parts[i].split(':');
@@ -108,6 +118,7 @@ function render(pages) {
     }
     
     var root = $('#survey');
+    root.empty();
     for (var i = 0; i < pages.length; i++) {
         $(root).append(renderPage(state, pages[i]));
     }
@@ -159,13 +170,24 @@ function renderQuestions(state, div, pageConfig, questions, level, opt_parent) {
     }
 }
 
+function interpolateStatic(s) {
+    return s.replace(/\(([^)]+)\)/g, function(fullMatch, varName) {
+        var replacement;
+        switch (varName) {
+            case '$user': replacement = window.loggedInUser.name; break;
+            default: replacement = fullMatch;
+        }
+        return replacement;
+    });
+}
+
 function renderPage(state, page) {
     var div = $('<div class="page">');
     div.append($('<h1>').text(page.title));
     if (page.static) {
         var paras = page.static.split(/\n\n+/);
         for (var i = 0; i < paras.length; i++) {
-            div.append($('<div class="static">').text(paras[i]));
+            div.append($('<div class="static">').text(interpolateStatic(paras[i])));
         }
     }
     if (page.questions) {
@@ -208,6 +230,7 @@ function renderQuestion(state, config, pageConfig, level) {
         div.trigger('question:change');
     };
     question.interpolate = function(s) {
+        s = interpolateStatic(s);
         return s.replace(/\(([^)]+)\)/g, function(_, varName) {
             var replacement;
             var filters = varName.split(':');
