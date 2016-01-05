@@ -9,10 +9,12 @@
 
 # TODO
 
-* Question and section skipping (1 hour)
 * Local storage: survey results (1 hour)
-* GPS + start / end time (1 hour)
 * CSV output (1 hour)
 * Remaining sections (2 hours)
-* Local storage: survey in progress (1 hour)
 * Number field min/max support + validation
+* Retry / manual entry when GPS fails
+
+Nice to have:
+
+* Local storage: survey in progress (1 hour)

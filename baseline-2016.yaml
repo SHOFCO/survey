@@ -366,15 +366,15 @@
     -   label: "If a member of your family became infected with HIV, would you want to keep it a secret?"
         type: options
         options:
-        - Yes
-        - No
+        - "Yes"
+        - "No"
         - Not Sure
         
     -   label: Do you think those who are HIV+ should declare their status to family members or public?
         type: options
         options:
-        - Yes
-        - No
+        - "Yes"
+        - "No"
         - Not Sure
         
     -   label: Have you ever been tested for HIV? 

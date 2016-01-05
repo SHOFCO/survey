@@ -72,6 +72,21 @@ textarea {
     width: 100%;
 }
 
+#gpsStatus {
+    position: absolute;
+    right: 0.5em;
+    font-size: 11pt;
+    color: #999;
+}
+
+#gpsStatus.ok {
+    color: #9c9;
+}
+
+#gpsStatus.error {
+    color: #f99;
+}
+
 .question {
     background: #eee;
     padding: 0.5em;

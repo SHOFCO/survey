@@ -96,9 +96,40 @@ function renderPages() {
     var pages = window.pages;
     var state = {
         questions: [],
-        references: {}
+        references: {},
+        startTime: new Date(),
+        endTime: null,
+        coords: null
     };
     window.debugState = state;
+    
+    var gpsStatus = $('<div id="gpsStatus">').text('GPS: Loading');
+    navigator.geolocation.getCurrentPosition(function(location) {
+        // Success.
+        state.coords = location.coords;
+        gpsStatus.text('GPS: OK').addClass('ok');
+    }, function(err) {
+        // Errors.
+        gpsStatus.click(function() {
+            switch (err.code) {
+                case err.PERMISSION_DENIED:
+                    alert('Error getting GPS coordinate: permission denied');
+                    break;
+                case err.POSITION_UNAVAILABLE:
+                    alert('Error getting GPS coordinate: position unavailable');
+                    break;
+                case err.TIMEOUT:
+                    alert('Error getting GPS coordinate: timeout');
+                    break;
+                default:
+                    alert('Unknown error getting GPS coordinate');          
+            }
+        }).text('GPS: Error').addClass('error');
+    }, {
+        enableHighAccuracy: true,
+        timeout: 90000,
+        maximumAge: 0
+    });
     
     var filter = getUrlParameter('filter');
     if (filter) {
@@ -122,11 +153,16 @@ function renderPages() {
     
     var root = $('#survey');
     root.empty();
+    root.append(gpsStatus);
     for (var i = 0; i < pages.length; i++) {
         $(root).append(renderPage(state, pages[i]));
     }
     
-    state.end = $('<div class="end"><a href="#">Complete This Survey</a></div>').hide();
+    state.end = $('<div class="end"><a href="#">Complete This Survey</a></div>').hide().click(function() {
+        state.endTime = new Date();
+        console.log(state);
+        // TODO: WHAT ELSE?
+    });
     $(root).append(state.end);
     
     setVisibility(state);
