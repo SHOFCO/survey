@@ -88,7 +88,10 @@ def main():
     if errors:
         print '%d Errors!' % errors
     else:
-        json.dump(raw, open('viewer/baseline-2016.json', 'w'))
+        with open('viewer/baseline-2016.js', 'w') as f:
+            f.write('window.pages = ')
+            json.dump(raw, f)
+            f.write(';')
         print 'Success!'
     
     

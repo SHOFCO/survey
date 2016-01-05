@@ -15,7 +15,6 @@ RENDER = {
 SKIPPED = new Object();
 
 window.loggedInUser = null;
-window.pages = null;
 
 $(document).ready(function() {
     $('#createUser form').submit(function(e) {
@@ -41,14 +40,11 @@ $(document).ready(function() {
             $('#createUser').hide();
         }
     });
-    $.getJSON('baseline-2016.json', function(pages) {
-        window.pages = pages;
-        renderUserPicker();
-        $('#userPicker').show();
-        if (getUrlParameter('user')) {
-            selectUser(getUsers()[window.parseInt(getUrlParameter('user'), 10)]);
-        }
-    });
+    renderUserPicker();
+    $('#userPicker').show();
+    if (getUrlParameter('user')) {
+        selectUser(getUsers()[window.parseInt(getUrlParameter('user'), 10)]);
+    }
 });
 
 function selectUser(user) {
@@ -160,7 +156,6 @@ function renderPages() {
     
     state.end = $('<div class="end"><a href="#">Complete This Survey</a></div>').hide().click(function() {
         state.endTime = new Date();
-        console.log(state);
         // TODO: WHAT ELSE?
     });
     $(root).append(state.end);
