@@ -60,7 +60,8 @@ function renderUserPicker() {
     root.empty();
     var userDiv = $('<div id="userList">');
     for (var i = 0; i < users.length; i++) {
-        userDiv.append($('<a href="#">').text(users[i].name).click(function(user) {
+        var label = users[i].name + ' (' + users[i].rowCount + ' completed)'
+        userDiv.append($('<a href="#">').text(label).click(function(user) {
             var pin = prompt('Enter pin for ' + user.name);
             if (pin == user.pin) {
                 selectUser(user);
@@ -155,8 +156,28 @@ function renderPages() {
     }
     
     state.end = $('<div class="end"><a href="#">Complete This Survey</a></div>').hide().click(function() {
-        state.endTime = new Date();
-        // TODO: WHAT ELSE?
+        state.endTime = new Date();        
+        var result = {
+            "Start Time": state.startTime,
+            "End Time": state.endTime,
+            "Latitude": state.coords ? state.coords.latitude : null,
+            "Longitude": state.coords ? state.coords.longitude : null,
+            "GPS Accuracy": state.coords ? state.coords.accuracy : null
+        };
+        for (var i = 0; i < state.questions.length; i++) {
+            state.questions[i].serializeValue(result);
+        }
+
+        var keys = Object.keys(result);
+        var values = [];
+        for (var i = 0; i < keys.length; i++) {
+            values.push(result[keys[i]]);
+        }
+        addRow(window.loggedInUser.userId, [keys, values]);
+        
+        renderUserPicker();
+        $('#userPicker').show();
+        $('#survey').hide();
     });
     $(root).append(state.end);
     
@@ -257,6 +278,9 @@ function renderQuestion(state, config, pageConfig, level) {
             state.references[config.referenceAs] = question.value;
         }
         div.trigger('question:change');
+    };
+    question.serializeValue = function(resultObject) {
+        resultObject['Question: ' + this.config.label] = this.value;
     };
     question.interpolate = function(s) {
         s = interpolateStatic(s);
@@ -399,11 +423,14 @@ function renderText(div, question, config) {
         input = $('<textarea>').attr('rows', config.rows);
     }
     div.append(input.change(function() {
-        question.setValue(parseInt($(this).val(), 10));
+        question.setValue($(this).val());
     }));
 }
 
 function renderSignature(div, question, config) {
+    // Nothing to serialize in this case.
+    question.serializeValue = function() {};
+    
     div.append($('<a href="#">').text('Sign').click(function(e) {
         e.preventDefault();
         if (prompt(window.loggedInUser.name + ', please enter your PIN:') == window.loggedInUser.pin) {
@@ -416,6 +443,10 @@ function renderSignature(div, question, config) {
 }
 
 function renderCheckboxes(div, question, config) {
+    question.serializeValue = function() {
+        // TODO: this!
+    };
+    
     for (var i = 0; i < config.options.length; i++) {
         var id = question.id + '-' + i;
         div.append(
@@ -488,6 +519,9 @@ function renderCheckboxes(div, question, config) {
 }
 
 function renderRandom(div, question, config) {
+    // Nothing to serialize in this case.
+    question.serializeValue = function() {};
+
     div.append($('<a href="#">').text('Generate').click(function(e) {
         var min = parseInt(question.interpolate(question.config.min + ''), 10);
         var max = parseInt(question.interpolate(question.config.max + ''), 10);
@@ -541,6 +575,10 @@ function renderOptions(div, question, config) {
 }
 
 function renderTable(div, question, config) {
+    question.serializeValue = function() {
+        // TODO: this!
+    };
+
     var table = $('<table>');
     var tr = $('<tr>');
     tr.append($('<th>').text(config.keyLabel));

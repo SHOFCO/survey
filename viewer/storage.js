@@ -30,6 +30,11 @@ function setObject(var_args) {
     localStorage.setItem(key, JSON.stringify(value));
 }
 
+function removeObject(var_args) {
+    var object = getObject.apply(this, arguments);
+    localStorage.removeItem(storageKey.apply(this, arguments));
+    return object;
+}
 
 
 function addRow(userId, values) {
@@ -45,6 +50,17 @@ function getRows(userId) {
         rows.push(getObject(StorageKey.USER, userId, StorageKey.ROW, i));
     }
     return rows;
+}
+
+function clearAllRows() {
+    var users = getUsers();
+    for (var i = 0; i < users.length; i++) {
+        var userId = users[i].userId;
+        var rowCount = removeObject(StorageKey.USER, userId, StorageKey.ROW_COUNT) || 0;
+        for (var j = 0; j < rowCount; j++) {
+            removeObject(StorageKey.USER, userId, StorageKey.ROW, j);
+        }
+    }
 }
 
 function createUser(name, pin) {
@@ -63,7 +79,9 @@ function getUsers() {
     var userCount = getObject(StorageKey.USER_COUNT) || 0;
     var users = [];
     for (var i = 0; i < userCount; i++) {
-        users.push(getObject(StorageKey.USER, i));
+        var user = getObject(StorageKey.USER, i);
+        user.rowCount = getObject(StorageKey.USER, i, StorageKey.ROW_COUNT) || 0;
+        users.push(user);
     }
     return users;
 }
