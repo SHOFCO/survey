@@ -1,6 +1,11 @@
 html, body, h1, h2, div, td, th {
     font-family: San Francisco, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 15pt;
     text-align: left;
+}
+
+body {
+    padding-bottom: 80px;
 }
 
 table { 

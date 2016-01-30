@@ -181,12 +181,13 @@ function renderPages() {
     });
     $(root).append(state.end);
     
-    setVisibility(state);
+    setVisibility(state, false);
     $('div.question').on('question:change', function() {
-        setVisibility(state);
-        
         var sel = $(this);
-        if (!sel.hasClass('checkboxes') && !sel.hasClass('random')) {
+        var willScroll = !sel.hasClass('checkboxes') && !sel.hasClass('random');
+        setVisibility(state, willScroll);
+        
+        if (willScroll) {
             scrollPast(sel);
         }
     });
@@ -373,6 +374,12 @@ function setVisibility(state, scroll) {
         if (shouldShow) {
             question.div.show();
             question.div.closest('div.page').show().prevAll('div.page.staticOnly').show();
+            if (!question.hasBeenShown) {
+                if (scroll) {
+                    question.div.find('input, textarea').first().select();
+                }
+                question.hasBeenShown = true;
+            }
             if (question.value === undefined) {
                 break;
             }
