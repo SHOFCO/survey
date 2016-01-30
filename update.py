@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import json
+import sys
 import yaml
 
 
@@ -35,39 +36,41 @@ SCHEMA = {
     }
 }
 
-def validateQuestion(question):
+
+def validate_question(question):
     errors = 0
-    fieldType = question.get('type')
+    field_type = question.get('type')
     label = question.get('label', 'UNLABELED QUESTION')
-    if not fieldType:
+    if not field_type:
         print 'Question "%s" has no type' % label
         errors += 1
         
-    elif fieldType not in SCHEMA:
-        print 'Question "%s" has illegal type' % (label, fieldType)
+    elif field_type not in SCHEMA:
+        print 'Question "%s" has illegal type: "%s"' % (label, field_type)
         errors += 1
         
     else:
         fields = set(question.keys())
-        required = SCHEMA['*']['required'] | SCHEMA[fieldType].get('required', set())
-        allowed = SCHEMA['*']['allowed'] | SCHEMA[fieldType].get('allowed', set())
+        required = SCHEMA['*']['required'] | SCHEMA[field_type].get('required', set())
+        allowed = SCHEMA['*']['allowed'] | SCHEMA[field_type].get('allowed', set())
         
         if required - fields:
-            print 'Question "%s" of type %s is missing fields: %s' % (label, fieldType, required - fields)
+            print 'Question "%s" of type %s is missing fields: %s' % (label, field_type, required - fields)
         extra = fields - (required | allowed)
         if extra:
-            print 'Question "%s" of type %s has extra fields: %s' % (label, fieldType, extra)
+            print 'Question "%s" of type %s has extra fields: %s' % (label, field_type, extra)
         
     if 'subs' in question:
         for sub in question['subs']:
-            errors == validateQuestion(sub)
+            errors == validate_question(sub)
 
     return errors
 
     
 def main():
+    filename = sys.argv[1] if len(sys.argv) > 1 else 'baseline-2016.yaml'
     try:
-        s = open('baseline-2016.yaml').read().replace('-\t', '-   ').replace('\t', '    ')
+        s = open(filename).read().replace('-\t', '-   ').replace('\t', '    ')
         raw = yaml.load(s)
     except yaml.YAMLError as exc:
         print 'Could not load file'
@@ -78,7 +81,7 @@ def main():
     for page in raw:
         if 'questions' in page:
             for question in page['questions']:
-                errors += validateQuestion(question)
+                errors += validate_question(question)
             
     # TODO: compilation / validation
     #    - no overlapping keys
@@ -93,7 +96,6 @@ def main():
             json.dump(raw, f)
             f.write(';')
         print 'Success!'
-    
     
 
 if __name__ == '__main__':

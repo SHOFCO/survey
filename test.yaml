@@ -1,0 +1,50 @@
+##########################################################################
+-   title: Test
+    questions:
+        -   label: table question
+            type: table
+            keyLabel: Question
+            valueLabel: Answer
+            valueType: number
+            keys:
+            - 2^2
+            - 100 - 90
+
+        -   label: number question
+            type: number
+
+        -   label: checkboxes question
+            type: checkboxes
+            options:
+            - yes this one
+            - no this one
+            - yes this one too
+
+        -   label: text question
+            type: text
+
+        -   label: yes no question
+            type: yesNo
+
+        -   label: options question
+            type: options
+            options:
+            - Not this one
+            - or this one
+            - pick this one
+            - and not this one
+
+        -   label: options question where we pick other
+            type: options
+            other: true
+            options:
+            - none
+            - of
+            - these
+
+        -   label: options question with ignored other
+            type: options
+            other: true
+            options:
+            - pick me
+            - not me

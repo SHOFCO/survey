@@ -443,8 +443,11 @@ function renderSignature(div, question, config) {
 }
 
 function renderCheckboxes(div, question, config) {
-    question.serializeValue = function() {
-        // TODO: this!
+    question.serializeValue = function(resultObject) {
+        resultObject[config.label] = ''; // Add a marker column.
+        for (var key in this.value) {
+            resultObject[key] = this.value[key];
+        }
     };
     
     for (var i = 0; i < config.options.length; i++) {
@@ -575,8 +578,11 @@ function renderOptions(div, question, config) {
 }
 
 function renderTable(div, question, config) {
-    question.serializeValue = function() {
-        // TODO: this!
+    question.serializeValue = function(resultObject) {
+        resultObject[config.label] = ''; // Add a marker column.
+        for (var key in this.value) {
+            resultObject[key] = this.value[key];
+        }
     };
 
     var table = $('<table>');

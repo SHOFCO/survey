@@ -9,12 +9,11 @@
 
 # TODO
 
-* Checkbox value serialization (30 mins - pending example desired output)
-* Table value serialization (30 mins - pending example desired output)
 * CSV output (1 hour)
 * Remaining sections (2 hours)
 * Number field min/max support + validation
 * Retry / manual entry when GPS fails
+* App packaging (2 hours)
 
 Nice to have:
 
