@@ -1,7 +1,10 @@
 html, body, h1, h2, div, td, th {
     font-family: San Francisco, Helvetica Neue, Helvetica, sans-serif;
-    font-size: 15pt;
     text-align: left;
+}
+
+body, div, input, select, textarea {
+    font-size: 15pt;
 }
 
 body {
@@ -78,10 +81,10 @@ textarea {
 }
 
 #gpsStatus {
-    position: absolute;
-    right: 0.5em;
+    float: right;
     font-size: 11pt;
     color: #999;
+    padding: 0 5px 5px 5px;
 }
 
 #gpsStatus.ok {
@@ -109,10 +112,13 @@ textarea {
     color: #999;
 }
 
+.question h2 {
+    margin-right: 5em;
+}
+
 .question a.skip {
-    position: absolute;
-    top: 0.5em;
-    right: 1em;
+    float: right;
+    padding: 0 0 0.5em 0.5em;
     color: #aaa;
     text-decoration: none;
     font-weight: bold;

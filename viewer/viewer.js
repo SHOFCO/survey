@@ -318,7 +318,6 @@ function renderQuestion(state, config, pageConfig, level) {
     };
 
     var div = $('<div class="question ' + config.type + ' level' + level + '">');
-    div.append($('<h2>').text(config.label));
     if (!config.unskippable) {
         div.append($('<a href="#">').text('Skip').addClass('skip').click(function(e) {
             e.preventDefault();
@@ -334,6 +333,7 @@ function renderQuestion(state, config, pageConfig, level) {
             }
         }));
     }
+    div.append($('<h2>').text(config.label));
     if (config.instructions) {
         div.append($('<div class="instructions">').text(config.instructions));
     }
