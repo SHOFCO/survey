@@ -6,6 +6,7 @@
         <param name="onload" value="true" />
     </feature>
     <allow-intent href="market:*" />
+    <icon density="xhdpi" src="android-xhdpi.png" />
     <name>Survey</name>
     <description>
         SHOFCO survey application
@@ -21,4 +22,5 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <icon src="android-xxxhdpi.png" />
 </widget>
