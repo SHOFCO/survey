@@ -18,3 +18,11 @@
 Nice to have:
 
 * Local storage: survey in progress (1 hour)
+
+
+# Notes
+
+## Setting up a device for development
+
+http://developer.android.com/tools/device.html
+
