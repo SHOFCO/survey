@@ -160,7 +160,6 @@ textarea {
     width: 95%;
 }
 
-#userPicker a {
-    display: block;
+.user {
     margin: 0.25em 0;
 }

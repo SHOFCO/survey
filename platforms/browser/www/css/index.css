@@ -3,7 +3,7 @@ html, body, h1, h2, div, td, th {
     text-align: left;
 }
 
-body, div, input, select, textarea {
+body, div, input, select, textarea, button, label {
     font-size: 15pt;
 }
 
@@ -32,11 +32,11 @@ h1, h2 {
 }
 
 h1 {
-    font-size: 1.5em;
+    font-size: 1.2em;
 }
 
 h2 {
-    font-size: 1.25em;
+    font-size: 1.1em;
 }
 
 div.instructions {
@@ -160,7 +160,6 @@ textarea {
     width: 95%;
 }
 
-#userPicker a {
-    display: block;
+.user {
     margin: 0.25em 0;
 }

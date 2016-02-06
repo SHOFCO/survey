@@ -11,9 +11,6 @@ RENDER = {
     'table': renderTable
 }
 
-// Marker object for skipped questions.
-SKIPPED = new Object();
-
 window.loggedInUser = null;
 
 $(document).ready(function() {
@@ -58,21 +55,38 @@ function renderUserPicker() {
     var users = getUsers();
     var root = $('#userPicker');
     root.empty();
-    var userDiv = $('<div id="userList">');
+    var usersDiv = $('<div id="userList">');
     for (var i = 0; i < users.length; i++) {
-        var label = users[i].name + ' (' + users[i].rowCount + ' completed)'
-        userDiv.append($('<a href="#">').text(label).click(function(user) {
+        var userDiv = $('<div class="user">');
+        var user = users[i];
+        
+        usersDiv.append($('<a href="#">').text(user.name).click(function(user, e) {
+            e.preventDefault();
             var pin = prompt('Enter pin for ' + user.name);
             if (pin == user.pin) {
                 selectUser(user);
             } else {
                 alert('Incorrect PIN');
             }
-        }.bind(this, users[i])));
+        }.bind(this, user)));
+        
+        if (user.rowCount) {
+            usersDiv.append(' (' + user.rowCount + ' completed - ');
+            usersDiv.append($('<a>').text('download').attr('href', csvUrl(getRows(user.userId))));
+            usersDiv.append(' - ');
+            usersDiv.append($('<a href="#">').text('clear').click(function(user, e) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to clear ' + user.rowCount + ' rows?')) {
+                    clearUserRows(user.userId);
+                    renderUserPicker();
+                }
+            }.bind(this, user)));
+            usersDiv.append(')');
+        }
     }
-    root.append(userDiv);
+    root.append(usersDiv);
     root.append($('<br>'))
-    root.append($('<a href="#">').text('New user').click(function() {
+    root.append($('<button>').text('New user').click(function() {
         $('#createUser input').val('');
         $('#createUser').show();
         $('#createUserName').select();

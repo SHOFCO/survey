@@ -55,11 +55,14 @@ function getRows(userId) {
 function clearAllRows() {
     var users = getUsers();
     for (var i = 0; i < users.length; i++) {
-        var userId = users[i].userId;
-        var rowCount = removeObject(StorageKey.USER, userId, StorageKey.ROW_COUNT) || 0;
-        for (var j = 0; j < rowCount; j++) {
-            removeObject(StorageKey.USER, userId, StorageKey.ROW, j);
-        }
+        clearUserRows(users[i].userId);
+    }
+}
+
+function clearUserRows(userId) {
+    var rowCount = removeObject(StorageKey.USER, userId, StorageKey.ROW_COUNT) || 0;
+    for (var j = 0; j < rowCount; j++) {
+        removeObject(StorageKey.USER, userId, StorageKey.ROW, j);
     }
 }
 

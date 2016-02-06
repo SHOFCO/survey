@@ -72,7 +72,7 @@ function renderUserPicker() {
     }
     root.append(userDiv);
     root.append($('<br>'))
-    root.append($('<a href="#">').text('New user').click(function() {
+    root.append($('<button>').text('New user').click(function() {
         $('#createUser input').val('');
         $('#createUser').show();
         $('#createUserName').select();
