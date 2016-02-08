@@ -1013,18 +1013,201 @@
     questions:
     -   label: Boy children are more valued in this community than girl children.
         type: options
-        options:
-        - Agree
-        - Disagree
+        options: [ Agree, Disagree ]
     
     -   label: "In this community, children being raped is a serious problem."
         type: options
-        options:
-        - Agree
-        - Disagree
+        options: [ Agree, Disagree ]
         
     -   label: "In this community, girls and boys have an equal chance of a good future."
         type: options
+        options: [ Agree, Disagree ]
+
+
+##########################################################################
+-   title: Gender Attitudes / Beliefs
+    static: |
+        In Kibera and elsewhere, people have different ideas about families and what is
+        acceptable behavior from men and women in the home. I am going to read you a list of
+        statements, and I would like you to tell me whether you generally agree or disagree
+        with the statement. There are no right or wrong answers.
+    questions:
+    -   label: I think people should be treated the same whether they are male or female
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+
+
+##########################################################################
+-   title: Household Violence
+    static: |
+        In your opinion, a man has good reason to hit his wife if: (DHS)
+    questions:
+    -   label:  If she leaves the house without telling him? (DHS)
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+
+    -   label: She neglects the children? (DHS)
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+
+    -   label: If she argues with him? (DHS)
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+
+    -   label: "She refuses to have sexual relations with him? (DHS & GC)"
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+
+    -   label: If she burns the food? (DHS)
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+
+    -   label: She is unfaithful? (GC)
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+
+    -   label: A woman should tolerate violence to keep her family together
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+
+    -   label: "If someone insults a man, he should defend his reputation with force if he has to."
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+    -   label: A man using violence against his wife is a private matter that shouldn't be discussed outside the couple
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+
+
+##########################################################################
+-   title: Sexual Relationships
+    questions:
+    -   label: Men are always ready to have sex.
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+    -   label: Men need sex more than women do.
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+    -   label: A man needs other women even if things with his wife are fine.
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+    -   label: "Couples shouldn't talk about sex, they should just do it."
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+    -   label: A woman should not initiate sex.
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+    -   label: A woman who has sex before she marries does not deserve respect.
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+
+##########################################################################
+-   title: Reproductive Health and Disease Prevention
+    questions:
+    -   label: Women who carry condoms on them are easy.
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+    -   label: Men should be outraged if their wives ask them to use a condom.
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+    -   label: It is a woman's responsibility to avoid getting pregnant.
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+    -   label: "Only when a woman has a child, she is a real woman."
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+    -   label: A real man produces a male child.
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+
+##########################################################################
+-   title: Domestic Chores and Daily Life
+    questions:
+    -   label: "Changing diapers, giving a bath, and feeding kids is the mother's responsibility"
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+    -   label: "A woman's role is taking care of her home and family."
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+    -   label: The husband should decide to buy the major household items.
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+    -   label: A man should have the final word about decisions in his home.
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+    
+    -   label: A woman should obey her husband in all things.
+        type: options
+        options: [ Agree, Partially agree, Disagree, Do Not Know, Chose Not To Answer ]
+
+
+##########################################################################
+-   title: Final Questions
+    static: "Thank you for answering these questions. To wrap up:"
+    questions:
+    -   label: Before today have you ever heard of SHOFCO?
+        type: yesNo
+        subs:
+        -   label: What have you heard?
+            when: ($parent) == 'Yes'
+            type: text
+            rows: 3
+    
+    -   label: Have you ever heard of SUN (SHOFCO Urban Network)?
+        type: yesNo
+        subs:
+        -   label: What is your opinion of it?
+            when: ($parent) == 'Yes'
+            type: text
+            rows: 3
+        
+    -   label: Have you ever read the Ghetto Mirror?
+        type: yesNo
+        subs:
+        -   label: What is your opinion of it?
+            when: ($parent) == 'Yes'
+            type: text
+            rows: 3
+            
+    -   label: What problem in the community do you think SHOFCO should most urgently address?
+        type: text
+        rows: 3
+    
+    -   label: How would you rate your experience of this interview?
+        type: options
         options:
-        - Agree
-        - Disagree
+        - Very Bad
+        - Bad
+        - Neither Good or Bad
+        - Good
+        - Very Good
+        
+    -   label: Do you have any comments or concerns about the survey or any of the questions we asked?
+        type: text
+        rows: 3
+        
+
+##########################################################################
+-   title: Post-Interview
+    footer: true
+    static: |
+        Those are all the questions we have for you today. I would like to thank you very much
+        for helping us. I appreciate the time you have taken, and realize that these questions
+        may have been difficult for you to answer. Here is a list of SHOFCO services. These
+        services are accessible—and are designed to serve people like you, so enjoy! In addition,
+        if you have any questions or complaints about this interview please contact, please call
+        SHOFCO’s main number, 0707080734 and ask for Solomon/Johnson for more details.

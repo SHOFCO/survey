@@ -268,6 +268,9 @@ function renderPage(state, page) {
     } else {
         div.addClass('staticOnly');
     }
+    if (page.footer) {
+        div.addClass('footer');
+    }
 
     return div;
 }
@@ -414,6 +417,7 @@ function setVisibility(state, scroll) {
 
     if (i == state.questions.length || endComplete) {
         state.end.show();
+        $('.footer').show();
     } else {
         state.end.hide();
     }
