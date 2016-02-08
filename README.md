@@ -9,11 +9,10 @@
 
 # TODO
 
-* CSV output (1 hour)
+* Annual Survey Household Chart
 * Remaining sections (2 hours)
 * Number field min/max support + validation
 * Retry / manual entry when GPS fails
-* App packaging (2 hours)
 
 Nice to have:
 

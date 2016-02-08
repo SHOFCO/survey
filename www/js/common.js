@@ -40,7 +40,7 @@ function csvUrl(rows) {
         }
         csv.push(line.join(','));
     }
-    
+
     var csvString = csv.join('\n');
     return 'data:text/csv;base64,' + btoa(csvString);
 }

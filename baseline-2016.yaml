@@ -1,19 +1,49 @@
 ##########################################################################
 -   title: SHOFCO Kibera Baseline Survey Form
     questions:
-        -   label: Village
+        -   label: Survey Location
             type: options
             options:
-            - Mashimoni
-            - Lindi
-            - Kianda
-            - Kisumu Ndongo
-            - Silanga
-            - Raila
-            - Makongeni
-            - Gatwekera
-            other: true
-            unskippable: true
+            - Mathare
+            - Kibera
+            
+            subs:
+            -   label: Mathare Village
+                type: options
+                when: ($parent) == 'Mathare'
+                options:
+                - Mabatini
+                - Bondeni
+                - 4B
+                - 3A
+                - 3C
+                - Mradi
+                - T-Area
+                - Number 10
+                - 4A
+                - Baraka
+                - Adhara
+                - H-Area
+                - F-Area
+                - Ganja
+                - G-Area
+                other: true
+                unskippable: true
+        
+            -   label: Kibera Village
+                type: options
+                when: ($parent) == 'Kibera'
+                options:
+                - Mashimoni
+                - Lindi
+                - Kianda
+                - Kisumu Ndongo
+                - Silanga
+                - Raila
+                - Makongeni
+                - Gatwekera
+                other: true
+                unskippable: true
 
         -   label: Language interview conducted in
             type: options
@@ -58,7 +88,7 @@
                 - SHOFCO Clean Water Kiosk
                 - Kibera School for Girls
                 - "GS&L"
-                - Urban Movement
+                - SHOFCO Urban Movement (SUN)
                 - Youth Programs
                 - SWEP
                 - Gender Department
@@ -101,18 +131,18 @@
 ##########################################################################
 -   title: General Instructions For Interviewer
     static: |
-        1. All the italic writings and bold are instructions for the interviewer to check, don’t read them aloud.
+        1. All the italic writings and bold are instructions for the interviewer to check, don't read them aloud.
         
         2. All bold, not italic are to be read out for the respondents.
         
         3. If the respondent is not ready to respond or uncomfortable with the question, skip the question.
         
-        4. If the respondent’s answer is not included in the answer choices, please include their answer in the “Other” answer space.
+        4. If the respondent's answer is not included in the answer choices, please include their answer in the “Other” answer space.
 
 
 ##########################################################################
 -   title: Demographic Information
-    static: "First I’d like to ask you some general questions about you and your family."
+    static: "First I'd like to ask you some general questions about you and your family."
     questions:
     -   label: Gender of Respondent
         type: options
@@ -125,6 +155,7 @@
     -   label: How old are you? (number of years)
         type: number
         min: 18 # TODO: support this!
+        max: 100
 
     -   label: What is your marital status?
         type: options
@@ -142,6 +173,8 @@
         -   label: How many children do you have?
             when: ($parent) == 'Yes'
             type: number
+            min: 1
+            max: 20
 
     -   label: How many siblings do you have?
         type: number
@@ -190,7 +223,7 @@
         - Cutlery
         - Gum Boots
         - Jacket
-        noneOfTheAbove: true
+        forceChoice: yes
     
     -   label: "In the last month, how much did you spend on:"
         instructions: |
@@ -231,6 +264,11 @@
     
     -   label: Do you have a bank account?
         type: yesNo
+        subs:
+        -   label: Where do you keep your money?
+            when: ($parent) == 'No'
+            type: text
+            rows: 3
     
     -   label: Are you currently employed?
         type: yesNo
@@ -261,7 +299,7 @@
         type: number
     
     -   label: How many people live in your house?
-        instructions: "(If the number given doesn’t match the family chart, please ask clarifying questions)"
+        instructions: "(If the number given doesn't match the family chart, please ask clarifying questions)"
         type: number
     
     -   label: What source of energy do you use to cook?
@@ -300,7 +338,7 @@
 ##########################################################################
 -   title: "Health & Medical Care"
     static: |
-        Now I’d like to ask you some questions about your life and health. Some of these
+        Now I'd like to ask you some questions about your life and health. Some of these
         questions are very personal. I would like to remind you that all of your answers will
         be kept completely anonymous.
     
@@ -329,7 +367,7 @@
         - JJJ (SHOFCO) Clinic
         - AMREF
         - Langata District Hospital
-        - St. Mary’s Hospital
+        - St. Mary's Hospital
         - Mbagathi District Hospital
         other: true
         
@@ -380,7 +418,7 @@
     -   label: Have you ever been tested for HIV? 
         type: yesNo
         subs:
-        -   label: Wen was the last time you were tested?
+        -   label: When was the last time you were tested?
             when: ($parent) == 'Yes'
             type: options
             options:
@@ -390,23 +428,32 @@
             - Past year
             - Past 2 years
             - More than 2 years ago
-            - Can’t remember
+            - Can't remember
 
 
 ##########################################################################
 -   title: "Water & Sanitation"
-    static: Now I’d like to ask you some questions about you and your household’s access to water and sanitation. 
+    static: Now I'd like to ask you some questions about you and your household's access to water and sanitation. 
     questions:
     -   label: Where do you get your drinking water?
         type: options
         options:
         - Tap
         - River
-        - SHOFCO Clean Water Kiosk
+        - Water Vendor
         other: true
 
     -   label: "Do you use the same water source for drinking as you do for other purposes, such as cooking or washing?"
-        type: yesNo 
+        type: yesNo
+        subs:
+        -   label: Where do you get your water for other purposes?
+            type: options
+            when: ($parent) == 'No'
+            options:
+            - Tap
+            - River
+            - Water Vendor
+            other: true
         
     -   label: "How long does it take you to get to your drinking water source, get water, and come back?"
         type: options
@@ -529,7 +576,7 @@
 -   title: Female respondents with children
     when: (hasGivenBirth) == 'Yes'
     questions:
-    -   label: How many times have  you given birth?
+    -   label: How many times have you given birth?
         type: number
         
     -   label: How many of your children are currently living?
@@ -548,7 +595,7 @@
         - When I intended
         - After I intended
         - I did not intend to get pregnant
-        - I don’t know
+        - I don't know
         
     -   label: "During your last/current pregnancy, when did you first visit a medical facility for your pregnancy?"
         type: options
@@ -597,7 +644,7 @@
         - Female sterilization
         - Male sterilization
         - Condoms
-        - “Safe days”
+        - '"Safe days"'
         - Withdrawal
         - Herbs
         other: true
@@ -616,11 +663,11 @@
         - Female sterilization
         - Male sterilization
         - Condoms
-        - “Safe days”
+        - '"Safe days"'
         - Withdrawal
         - Herbs
         other: true
-        noneOfTheAbove: true
+        forceChoice: true
         subs:
         -   label: How do you prevent unwanted pregnancies?
             when: ($parent:countCheckboxes) == 0
@@ -644,7 +691,7 @@
         - Female sterilization
         - Male sterilization
         - Condoms
-        - “Safe days”
+        - '"Safe days"'
         - Withdrawal
         - Herbs
         other: true
@@ -655,13 +702,13 @@
         options:
         - Not ready to have children
         - To provide space/intervals between children
-        - Can’t/Couldn’t afford another child
+        - Can't/Couldn't afford another child
         other: true
     
-    -   label: "Would you say that using contraceptive is mainly your decision, mainly your husband’s/partner’s decision, or did you both decide together? (DHS)"
+    -   label: "Would you say that using contraceptive is mainly your decision, mainly your husband's/partner's decision, or did you both decide together? (DHS)"
         type: options
         options:
-        - Mainly respondent’s decision
+        - Mainly respondent's decision
         - Mainly husband/partner
         - Joint decision with husband/partner
         other: true
@@ -755,7 +802,7 @@
         -   Disapprove
         -   Don't know
     
-    -   label: "Would you say that your wife/partner use of family planning is/should be mainly your decision, mainly your wife’s/partner’s decision, or a joint decision?"
+    -   label: "Would you say that your wife/partner use of family planning is/should be mainly your decision, mainly your wife's/partner's decision, or a joint decision?"
         type: options
         options:
         -   Mainly respondent

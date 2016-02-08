@@ -18,7 +18,7 @@ SCHEMA = {
     'signature': {},
     'checkboxes': {
         'required': {'options'},
-        'allowed': {'other', 'noneOfTheAbove'}
+        'allowed': {'other', 'noneOfTheAbove', 'forceChoice'}
     },
     'random': {
         'required': {'min', 'max'}
@@ -31,16 +31,27 @@ SCHEMA = {
         'allowed': {'other'}
     },
     'table': {
-        'required': {'keys', 'keyLabel', 'valueLabel'},
-        'allowed': {'valueType'}
+        'required': {'keys', 'keyLabel'},
+        'allowed': {'valueType', 'valueLabel'}
     }
 }
+
+
+def is_latin1(s):
+    try:
+        s.encode('latin1')
+        return True
+    except UnicodeEncodeError:
+        print 'Label %s uses invalid characters' % s
+        return False
 
 
 def validate_question(question):
     errors = 0
     field_type = question.get('type')
     label = question.get('label', 'UNLABELED QUESTION')
+    if not is_latin1(label):
+        errors += 1
     if not field_type:
         print 'Question "%s" has no type' % label
         errors += 1
@@ -60,6 +71,12 @@ def validate_question(question):
         if extra:
             print 'Question "%s" of type %s has extra fields: %s' % (label, field_type, extra)
         
+    for array_key in ('keys', 'options'):
+        if array_key in question:
+            for value in question[array_key]:
+                if not is_latin1(value):
+                    errors += 1
+
     if 'subs' in question:
         for sub in question['subs']:
             errors == validate_question(sub)
@@ -91,7 +108,7 @@ def main():
     if errors:
         print '%d Errors!' % errors
     else:
-        with open('viewer/baseline-2016.js', 'w') as f:
+        with open('www/js/baseline-2016.js', 'w') as f:
             f.write('window.pages = ')
             json.dump(raw, f)
             f.write(';')

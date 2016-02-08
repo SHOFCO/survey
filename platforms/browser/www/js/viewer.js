@@ -103,6 +103,13 @@ function itemAt(arr, index) {
     return arr[index];
 }
 
+function appendToArrays(keys, values, object) {
+    for (var key in object) {
+        keys.push(key);
+        values.push(object[key]);
+    }
+}
+
 function renderPages() {
     var pages = window.pages;
     var state = {
@@ -170,23 +177,23 @@ function renderPages() {
     }
     
     state.end = $('<div class="end"><a href="#">Complete This Survey</a></div>').hide().click(function() {
-        state.endTime = new Date();        
-        var result = {
+        state.endTime = new Date();
+        var keys = [];
+        var values = [];
+        appendToArrays(keys, values, {  
             "Start Time": state.startTime,
             "End Time": state.endTime,
             "Latitude": state.coords ? state.coords.latitude : null,
             "Longitude": state.coords ? state.coords.longitude : null,
             "GPS Accuracy": state.coords ? state.coords.accuracy : null
-        };
+        });        
+        
         for (var i = 0; i < state.questions.length; i++) {
+            var result = {};
             state.questions[i].serializeValue(result);
+            appendToArrays(keys, values, result);
         }
 
-        var keys = Object.keys(result);
-        var values = [];
-        for (var i = 0; i < keys.length; i++) {
-            values.push(result[keys[i]]);
-        }
         addRow(window.loggedInUser.userId, [keys, values]);
         
         renderUserPicker();
@@ -416,24 +423,30 @@ function setVisibility(state, scroll) {
     }
 }
 
-function renderYesNo(div, question, config) {
-    var yes = $('<input type="radio">').attr('name', question.id).attr('id', question.id + '-yes');
+function renderGenericYesNo(div, id, valueHandler) {
+    var yes = $('<input type="radio">').attr('name', id).attr('id', id + '-yes');
     div.append(yes);
-    div.append($('<label>').text('Yes').attr('for', question.id + '-yes'));
+    div.append($('<label>').text('Yes').attr('for', id + '-yes'));
     div.append(' ');
     yes.change(function() {
         if ($(this).is(':checked')) {
-            question.setValue('Yes');
+            valueHandler('Yes');
         }
     });
     
-    var no = $('<input type="radio">').attr('name', question.id).attr('id', question.id + '-no');
+    var no = $('<input type="radio">').attr('name', id).attr('id', id + '-no');
     div.append(no);
-    div.append($('<label>').text('No').attr('for', question.id + '-no'));
+    div.append($('<label>').text('No').attr('for', id + '-no'));
     no.change(function() {
         if ($(this).is(':checked')) {
-            question.setValue('No');
+            valueHandler('No');
         }
+    });
+}
+
+function renderYesNo(div, question, config) {
+    renderGenericYesNo(div, question.id, function(value) {
+        question.setValue(value);
     });
 }
 
@@ -466,39 +479,60 @@ function renderSignature(div, question, config) {
 function renderCheckboxes(div, question, config) {
     question.serializeValue = function(resultObject) {
         resultObject[config.label] = ''; // Add a marker column.
-        for (var key in this.value) {
-            resultObject[key] = this.value[key];
+        var values = this.value || {};
+        for (var i = 0; i < config.options.length; i++) {
+            var key = config.options[i];
+            resultObject[key] = (key in values) ? values[key] : '';
+        }
+        if (config.other) {
+            resultObject['Other'] = ('Other' in values) ? values['Other'] : '';
         }
     };
     
+    var table = $('<table cellspacing=0 cellpadding=0 border=0>');
+    div.append(table);
     for (var i = 0; i < config.options.length; i++) {
+        var tr = $('<tr class="checkbox">');
         var id = question.id + '-' + i;
-        div.append(
-            $('<div class="checkbox">')
-                .append($('<input type="checkbox">').attr('id', id))
-                .append(' ')
-                .append($('<label>').attr('for', id).text(config.options[i])));
+        var checkbox = $('<input type="checkbox">').attr('id', id);
+        tr.append($('<td>').append(checkbox));
+        tr.append($('<td>').append(
+            $('<label>').attr('for', id).text(config.options[i])));
+        if (config.forceChoice) {
+            checkbox.hide();
+            var td = $('<td>');
+            renderGenericYesNo(td, id, function(checkbox, value) {
+                checkbox.prop('checked', value == 'Yes');
+                checkbox.addClass('set');
+            }.bind(null, checkbox));
+            tr.append(td);
+        }
+        table.append(tr);
     }
     var otherId = question.id + '-other';
     var otherLabelId = otherId + '-label';
     var otherTextId = otherId + '-text';
     if (config.other) {
-        div.append(
-            $('<div class="checkbox">')
-                .append($('<input type="checkbox">').attr('id', otherId))
-                .append(' ')
-                .append($('<label>').attr('for', otherId).attr('id', otherLabelId).text('Other'))
-                .append($('<input type="text">').attr('id', otherTextId).hide()));
+        var tr = $('<tr class="checkbox">');
+        tr.append($('<td>').append(
+            $('<input type="checkbox">').attr('id', otherId)));
+        tr.append($('<td>').append(
+            $('<label>').attr('for', otherId).attr('id', otherLabelId).text('Other')));
+        tr.append($('<td>').append(
+            $('<input type="text">').attr('id', otherTextId).hide()));
+        table.append(tr);
     }
     var checkboxes = div.find('input[type=checkbox]');
     var noneId = question.id + '-none';
     var updateValue = function() {
         var result = {};
         var any = false;
+        var allSet = true;
         checkboxes.each(function(i, el) {
             var val = $(el).is(':checked');
             if (i < config.options.length) {
                 result[config.options[i]] = val;
+                allSet = allSet && $(el).hasClass('set');
             } else if (val) {
                 var text = $('#' + otherTextId);
                 text.show()
@@ -507,15 +541,13 @@ function renderCheckboxes(div, question, config) {
                 }
                 val = text.val();
                 result['Other'] = val;
-                $('#' + otherLabelId).hide();
             } else {
                 result['Other'] = '';
-                $('#' + otherLabelId).show();
                 $('#' + otherTextId).hide();
             }
-            any = any || val;
+            any = any || !!val;
         });
-        if (any) {
+        if (any && (allSet || !config.forceChoice)) {
             question.setValue(result);
             $('#' + noneId).prop('checked', false);
         } else if ($('#' + noneId).is(':checked')) {
@@ -528,11 +560,11 @@ function renderCheckboxes(div, question, config) {
 
     if (config.noneOfTheAbove) {
         var input = $('<input type="checkbox">').attr('id', noneId);
-        div.append(
-            $('<div class="checkbox">')
-                .append(input)
-                .append(' ')
-                .append($('<label>').attr('for', noneId).text('None of the above')));
+        var tr = $('<tr>');
+        tr.append($('<td>').append(input));
+        tr.append($('<td>').append(
+            $('<label>').attr('for', noneId).text('None of the above')));
+        table.append(tr);
         input.change(function() {
             if ($(this).is(':checked')) {
                 checkboxes.prop('checked', false);
@@ -601,29 +633,28 @@ function renderOptions(div, question, config) {
 function renderTable(div, question, config) {
     question.serializeValue = function(resultObject) {
         resultObject[config.label] = ''; // Add a marker column.
-        for (var key in this.value) {
-            resultObject[key] = this.value[key];
+        var values = this.value || {};
+        for (var i = 0; i < config.keys.length; i++) {
+            var key = config.keys[i];
+            resultObject[key] = values[key];
         }
     };
 
     var table = $('<table>');
-    var tr = $('<tr>');
-    tr.append($('<th>').text(config.keyLabel));
-    tr.append($('<th>').text(config.valueLabel));
-    table.append($('<thead>').append(tr));
+    var tr;
+    
+    if (config.valueLabel) {
+        tr = $('<tr>');
+        tr.append($('<th>').text(config.keyLabel));
+        tr.append($('<th>').text(config.valueLabel));
+        table.append($('<thead>').append(tr));
+    }
     
     var tbody = $('<tbody>');
     table.append(tbody);
     
-    for (var i = 0; i < config.keys.length; i++) {
-        tr = $('<tr>');
-        tr.append($('<td>').text(config.keys[i]));
-        tr.append($('<td>').append($('<input>').attr('type', config.valueType || 'text')));
-        tbody.append(tr);
-    }
-    
-    var inputs = table.find('input');
-    inputs.change(function() {
+    var inputs;
+    var updateFn = function() {
         var result = {};
         var all = true;
         inputs.each(function(i, el) {
@@ -636,7 +667,29 @@ function renderTable(div, question, config) {
         if (all) {
             question.setValue(result);
         }
-    });
+    };
+
+    for (var i = 0; i < config.keys.length; i++) {
+        tr = $('<tr>');
+        tr.append($('<td>').text(config.keys[i]));
+        
+        var valueTd = $('<td>');
+        if (config.valueType == 'yesNo') {
+            var input = $('<input class="tableRow">').attr('type', 'hidden');
+            valueTd.append(input);
+            renderGenericYesNo(valueTd, question.id + '-' + i, function(input, value) {
+                input.val(value);
+                updateFn();
+            }.bind(null, input));
+        } else {
+            valueTd.append($('<input class="tableRow">').attr('type', config.valueType || 'text'));
+        }
+        tr.append(valueTd);
+        tbody.append(tr);
+    }
+    
+    inputs = table.find('input.tableRow');
+    inputs.change(updateFn);
     
     div.append(table);
 }
