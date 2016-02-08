@@ -33,6 +33,9 @@ SCHEMA = {
     'table': {
         'required': {'keys', 'keyLabel'},
         'allowed': {'valueType', 'valueLabel'}
+    },
+    'person': {
+        'allowed': {'relationship'}
     }
 }
 

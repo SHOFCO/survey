@@ -195,6 +195,67 @@
 
 
 ##########################################################################
+-   title: Household Chart
+    static: |
+        Complete household matrix for all current household members (DO NOT RECORD NAMES).
+    questions:
+    -   label: Respondent
+        type: person
+        relationship: Respondent
+
+    -   label: Spouse
+        type: person
+        relationship: Spouse
+    
+    -   label: "Person 1"
+        type: person
+        referenceAs: person1
+    
+    -   label: "Person 2"
+        type: person
+        referenceAs: person2
+        when: "!(person1:skipped)"
+        
+    -   label: "Person 3"
+        type: person
+        referenceAs: person3
+        when: "!(person2:skipped)"
+
+    -   label: "Person 4"
+        type: person
+        referenceAs: person4
+        when: "!(person3:skipped)"
+
+    -   label: "Person 5"
+        type: person
+        referenceAs: person5
+        when: "!(person4:skipped)"
+        
+    -   label: "Person 6"
+        type: person
+        referenceAs: person6
+        when: "!(person5:skipped)"
+        
+    -   label: "Person 7"
+        type: person
+        referenceAs: person7
+        when: "!(person6:skipped)"
+        
+    -   label: "Person 8"
+        type: person
+        referenceAs: person8
+        when: "!(person7:skipped)"
+        
+    -   label: "Person 9"
+        type: person
+        referenceAs: person9
+        when: "!(person8:skipped)"
+        
+    -   label: "Person 10"
+        type: person
+        when: "!(person9:skipped)"
+
+##########################################################################
 -   title: Economic
     static: |
         Now I would like to ask you some questions about your household, your

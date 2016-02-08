@@ -8,7 +8,8 @@ RENDER = {
     'random': renderRandom,
     'number': renderNumber,
     'options': renderOptions,
-    'table': renderTable
+    'table': renderTable,
+    'person': renderPerson
 }
 
 window.loggedInUser = null;
@@ -324,6 +325,7 @@ function renderQuestion(state, config, pageConfig, level) {
             for (var i = 1; i < filters.length; i++) {
                 switch (filters[i]) {
                     case 'countCheckboxes': replacement = countCheckboxes(replacement); break;
+                    case 'skipped': replacement = replacement === undefined; break; 
                     default: throw 'Bad filter: ' + filters[i];
                 }
             }
@@ -696,4 +698,36 @@ function renderTable(div, question, config) {
     inputs.change(updateFn);
     
     div.append(table);
+}
+
+function renderGenericField(div, id, label, html) {
+    div.append($('<label for="' + id + '">' + label + '</label>'));
+    div.append(' ');
+    var result = $(html).attr('id', id).data('key', label);
+    div.append(result);
+    return result;
+}
+
+function renderPerson(div, question, config) {
+    var result = {};
+    result[question.label] = '';
+
+    var onChange = function(key) {
+        var key = $(this).data('key');
+        result[key] = $(this).val();
+        
+        if (Object.keys(result).length == 2) {
+            question.setValue(result);
+        }
+    };
+    renderGenericField(div, question.id + '-birthdate', 'Birthdate', '<input type="date">').change(onChange);
+
+    // Gender
+    // Relationship
+    // Level of schooling
+    // Employment status
+    // Employment type
+    // Average monthly income
+    // Sponsored?
+    // School fees (per month / year / term)
 }
