@@ -169,6 +169,7 @@
 
     -   label: Do you have children?
         type: yesNo
+        referenceAs: hasChildren
         subs:
         -   label: How many children do you have?
             when: ($parent) == 'Yes'
@@ -809,3 +810,221 @@
         -   Mainly wife / partner
         -   Joint decision
         other: true
+
+
+##########################################################################
+-   title: For Married Respondents Only
+    when: (maritalStatus) == 'Married'
+    questions:
+    -   label: Who usually decides how your Spouse's (husband or wife's) money will be used? 
+        type: options
+        options:
+        - Mainly You (Respondent)
+        - Mainly your Husband/Wife
+        - "Both You & Your Husband/Wife"
+        other: true
+    
+    -   label: Who usually decides how your (respondent's) money will be used?
+        type: options
+        options:
+        - Myself (Respondent)
+        - My Husband/Wife
+        - My Husband/Wife and I decide together
+        other: true
+        
+    -   label: Who in your family has the most control over decisions involving the education of your children?
+        when: (hasChildren) == 'Yes'
+        type: options
+        options:
+        - Myself (Respondent)
+        - Your Husband/Wife
+        - "Both You & Your Husband/Wife"
+        - Your Mother
+        - Your Father
+        other: true
+        
+
+##########################################################################
+-   title: Households with children
+    questions:
+    -   label: Are there any children in the household?
+        referenceAs: householdHasChildren
+        type: yesNo
+
+
+##########################################################################
+-   title: Child Discipline
+    when: (householdHasChildren) == 'Yes'
+    static: |
+        All adults use certain ways to teach children the right behavior or to address a behavior problem.
+        I will read various methods that are used and I want you to tell me if you or anyone else in your
+        household has used this method with your child/children in the past month?
+    questions:
+    -   label: "Took away privileges, forbid something the child liked or did not allow him/her to leave house."
+        type: yesNo
+    
+    -   label: Explained why something (the behavior) was wrong.
+        type: yesNo
+    
+    -   label: Shook him/her.
+        type: yesNo
+    
+    -   label: "Shouted, yelled at, or screamed at him/her."
+        type: yesNo
+        
+    -   label: "Hit, or slapped him/her with bare hand."
+        type: yesNo
+    
+    -   label: "Hit him/her with something like a belt, hairbrush, stick or other hard object."
+        type: yesNo
+    
+    -   label: "Called him/her dumb, lazy or another name like that."
+        type: yesNo
+    
+    -   label: Beat him/her up repeatedly with an object (hit over and over as hard as one could).
+        type: yesNo
+    
+    -   label: "Do you believe that in order to bring up (raise, educate) your child/Children properly you need to physically punish him/her?"
+        type: options
+        options:
+        - "Yes"
+        - "No"
+        - Don't know
+
+
+##########################################################################
+-   title: Family Roles / Attitudes
+    questions:
+    -   label: What is your ideal family size in terms of number of children?
+        instructions: |
+            Probing Questions: How many total children would you like to have?
+            If they already have children, would they like to have more and If YES, how many?
+        type: options
+        options:
+        - Zero
+        - One
+        - Two
+        - Three
+        - Four
+        - Five
+        - Six+
+        other: true
+
+
+##########################################################################
+-   title: General Quality of Life (QOL)
+    static: |
+        Explain what QOL is to respondents. QOL refers to the general well-being of a person,
+        defined in terms of health and happiness, rather than how much money they have.
+    questions:
+    -   label: How would you rate your quality of life?
+        type: options
+        options:
+        - Very poor
+        - Poor
+        - Neither poor nor good
+        - Good
+        - Very good
+    
+    -   label: Do you and your family feel safe in your home and your community?
+        instructions: (Read answers out loud)
+        type: options
+        options:
+        - Always
+        - Most of the time
+        - Sometimes
+        - Rarely
+        - Never
+
+    -   label: How do you expect your economic situation to be five years from now?
+        instructions: (Read answers out loud)
+        type: options
+        options:
+        - The same
+        - Better
+        - Much better
+        - Worse
+        - Don't know
+
+    -   label: Do you have enough money to meet your needs?
+        instructions: (Read answers out loud)
+        type: options
+        options:
+        - Not at all
+        - Some of the time
+        - Most of the time
+        - Always
+
+    -   label: 82. What are your greatest needs?
+        type: text
+        rows: 4
+
+
+##########################################################################
+-   title: Community Violence
+    questions:
+    -   label: Have you or a family member been the victim of an act of violence in the last year?
+        type : options
+        options:
+        - "Yes"
+        - "No"
+        - "Yes, but it has been more than a year"
+    
+    -   label: "If you or your relative were a victim of rape, how confident are you that the Kenyan legal system (e.g. police and courts) would take the necessary action to arrest, prosecute and punish the rapist?"
+        instructions: (Read answers out loud)
+        type: options
+        options:
+        - Not at all
+        - A little
+        - Somehow
+        - Very much
+        - Extremely
+    
+    -   label: "If you or your relative were a victim of rape, who would you turn to for help?"
+        type: options
+        options:
+        - I wouldn't seek help
+        - My Church/Mosque
+        - NGO/CBO GBV services
+        - Clinic/Hospital
+        - Relatives
+        - Neighbor/Friend
+        - Police
+        - Chief
+        - I don't know
+        
+    -   label: "If you or your relative were a victim of domestic violence, who would you turn to for help?"
+        type: options
+        options:
+        - I wouldn't seek help
+        - My Church/Mosque
+        - NGO/CBO GBV services
+        - Local Clinic/Hospital
+        - Relatives
+        - Neighbor/Friend
+        - Police
+        - Chief
+        - I don't know
+
+
+##########################################################################
+-   title: Community attitudes
+    static: Now I’m going to read you a few statements about Kibera / Maathare. Please tell me if you agree or disagree with each.
+    questions:
+    -   label: Boy children are more valued in this community than girl children.
+        type: options
+        options:
+        - Agree
+        - Disagree
+    
+    -   label: "In this community, children being raped is a serious problem."
+        type: options
+        options:
+        - Agree
+        - Disagree
+        
+    -   label: "In this community, girls and boys have an equal chance of a good future."
+        type: options
+        options:
+        - Agree
+        - Disagree
