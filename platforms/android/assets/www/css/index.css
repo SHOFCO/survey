@@ -72,7 +72,7 @@ div.table tbody tr:nth-child(even) {
     background: #eee;
 }
 
-div.table tbody input {
+div.table tbody input.tableRow {
     width: 95%;
 }
 
@@ -136,6 +136,10 @@ textarea {
     margin-left: 6em;
 }
 
+div.checkbox {
+    margin-bottom: 0.25em;
+}
+
 #createUser {
     position: absolute;
     left: 0;
@@ -160,7 +164,6 @@ textarea {
     width: 95%;
 }
 
-#userPicker a {
-    display: block;
+.user {
     margin: 0.25em 0;
 }
