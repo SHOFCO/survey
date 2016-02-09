@@ -701,33 +701,147 @@ function renderTable(div, question, config) {
 }
 
 function renderGenericField(div, id, label, html) {
-    div.append($('<label for="' + id + '">' + label + '</label>'));
-    div.append(' ');
+    var innerDiv = $('<div>');
+    
+    innerDiv.append($('<label for="' + id + '">' + label + '</label>'));
+    innerDiv.append(' ');
     var result = $(html).attr('id', id).data('key', label);
-    div.append(result);
+    innerDiv.append(result);
+    div.append(innerDiv);
     return result;
 }
 
+function option(opt_text, opt_value) {
+    opt_text = opt_text || '';
+    return $('<option>').text(opt_text).attr('value', opt_value || opt_text);
+}
+
 function renderPerson(div, question, config) {
+    var keys = [
+        config.label,
+        'Birthday',
+        'Gender',
+        'Relationship',
+        'Level of schooling',
+        'Employment Status',
+        'Employment Type',
+        'Average monthly income',
+        'Sponsored',
+        'School fees',
+        'School fee frequency'
+    ];
     var result = {};
-    result[question.label] = '';
+    question.serializeValue = function(resultObject) {
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+            resultObject[key] = result[key];
+        }
+    };
+
+    result[config.label] = '';
 
     var onChange = function(key) {
         var key = $(this).data('key');
         result[key] = $(this).val();
-        
-        if (Object.keys(result).length == 2) {
+        console.log(result);
+        if (Object.keys(result).length == keys.length) {
             question.setValue(result);
         }
     };
     renderGenericField(div, question.id + '-birthdate', 'Birthdate', '<input type="date">').change(onChange);
-
-    // Gender
-    // Relationship
-    // Level of schooling
-    // Employment status
-    // Employment type
-    // Average monthly income
-    // Sponsored?
-    // School fees (per month / year / term)
+    renderGenericField(div, question.id + '-gender', 'Gender', '<select>')
+        .append(option())
+        .append(option('Male'))
+        .append(option('Female'))
+        .append(option('Other'))
+        .change(onChange);
+    renderGenericField(div, question.id + '-relationship', 'Relationship', '<input type="text">')
+        .val(config.relationship || '')
+        .change(onChange);
+    if (config.relationship) {
+        result['Relationship'] = config.relationship;
+    }
+    renderGenericField(div, question.id + '-schooling', 'Level of schooling', '<select>')
+        .append(option())
+        .append(option('None', '1'))
+        .append(option('Some primary (dropped out)', '2'))
+        .append(option('Completed primary', '3'))
+        .append(option('Some secondary (dropped out)', '4'))
+        .append(option('Completed secondary', '5'))
+        .append(option('Completed vocational training', '6'))
+        .append(option('Some university (dropped out)', '7'))
+        .append(option('Completed university', '8'))
+        .append(option('Some college (dropped out)', '9'))
+        .append(option('Completed college', '10'))
+        .append(option('Currently attending primary', '11'))
+        .append(option('Currently attending secondary', '12'))
+        .append(option('Currently attending university', '13'))
+        .append(option('Currently attending college', '14'))
+        .append(option('Currently attending vocational training', '15'))
+        .change(onChange);
+    
+    renderGenericField(div, question.id + '-employment', 'Employment Status', '<select>')
+        .append(option())
+        .append(option('Unemployed', '1'))
+        .append(option('Self-employed part time', '2'))
+        .append(option('Self-employed full time', '3'))
+        .append(option('Employed part time', '4'))
+        .append(option('Employed full time', '5'))
+        .append(option('Casual labor', '6'))
+        .change(onChange);
+        
+    var onEmploymentTypeChange = function(e) {
+        var select = $('#' + question.id + '-employment-type');
+        var val = select.val();
+        var otherText = $('#' + question.id + '-other-employment-type');
+        if (val == 'Other') {
+            val = otherText.show().val();
+        } else {
+            otherText.hide();
+        }
+        if (val) {
+            onChange.call(select.get(0), e);
+        }
+    };
+    renderGenericField(div, question.id + '-employment-type', 'Employment Type', '<select>')
+        .append(option())
+        .append(option('Vendor', '1'))
+        .append(option('Carpentry', '2'))
+        .append(option('Construction', '3'))
+        .append(option('Education', '4'))
+        .append(option('Medical', '5'))
+        .append(option('Security', '6'))
+        .append(option('Tailoring', '7'))
+        .append(option('Housewife', '8'))
+        .append(option('Domestic Services (Cleaning, Laundry)', '9'))
+        .append(option('Other'))
+        .change(onEmploymentTypeChange)
+        .parent()
+            .append(' ').append(
+                $('<input type="text">')
+                    .attr('id', question.id + '-other-employment-type')
+                    .hide()
+                    .change(onEmploymentTypeChange));
+    renderGenericField(div, question.id + '-income', 'Average monthly income', '<input type="number">')
+        .change(onChange)
+        .parent().append(' Ksh');
+    renderGenericField(div, question.id + '-sponsored', 'Sponsored', '<select>')
+        .append(option())
+        .append(option('Yes'))
+        .append(option('No'))
+        .change(onChange);
+        
+    var fees = renderGenericField(div, question.id + '-school-fees', 'School fees', '<input type="number">')
+        .change(onChange);
+    fees.parent().append(' Ksh ');
+    
+    var term = renderGenericField(div, question.id + '-school-fee-timeframe', 'School fee frequency', '<select>')
+        .append(option())
+        .append(option('per month'))
+        .append(option('per term'))
+        .append(option('per year'))
+        .change(onChange);
+    
+    term.parent().detach();
+    fees.parent().append(term);
 }
