@@ -16,6 +16,7 @@
                 - Bondeni
                 - 4B
                 - 3A
+                - 3B
                 - 3C
                 - Mradi
                 - T-Area
@@ -387,7 +388,7 @@
         
     -   label: How do you dispose of your garbage?
         instructions: Check all that apply
-        type: options
+        type: checkboxes
         options:
         - Throw onto your own land/lot
         - Thrown into a Drain or ditch
