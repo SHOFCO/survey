@@ -73,7 +73,19 @@ function renderUserPicker() {
         
         if (user.rowCount) {
             usersDiv.append(' (' + user.rowCount + ' completed - ');
-            usersDiv.append($('<a>').text('download').attr('href', csvUrl(getRows(user.userId))));
+            var downloadLink = $('<a>').text('download');
+            if (device.platform == 'browser') {
+                downloadLink.attr('href', csvUrl(getRows(user.userId)));                
+            } else {
+                downloadLink.attr('href', '#').click(function(e) {
+                    window.plugin.email.open({
+                        to: 'systemadmin@shofco.org',
+                        subject: 'Survey results',
+                        attachments: 'base64:survey.csv//' + btoa(csv(getRows(user.userId)))
+                    });
+                });
+            }
+            usersDiv.append(downloadLink);
             usersDiv.append(' - ');
             usersDiv.append($('<a href="#">').text('clear').click(function(user, e) {
                 e.preventDefault();
@@ -91,21 +103,6 @@ function renderUserPicker() {
         $('#createUser input').val('');
         $('#createUser').show();
         $('#createUserName').select();
-    }));
-
-    root.append($('<a>').text('test1').attr('href', '#').click(function(e) {
-        e.preventDefault();
-        // Request the file system
-        var onFailure = function(error) {
-            debugger;
-            alert('Error: ' + error);
-        };
-        var data = csv([['a', '1']]);
-        window.plugin.email.open({
-            to: 'robby.walker@gmail.com',
-            subject: 'Survey results',
-            attachments: 'base64:survey.csv//' + btoa(data)
-        });
     }));
 }
 
@@ -206,7 +203,13 @@ function renderPages() {
         
         for (var i = 0; i < state.questions.length; i++) {
             var result = {};
-            state.questions[i].serializeValue(result);
+            var q = state.questions[i];
+            q.serializeValue(result);
+            if (q.value instanceof Skipped) {
+                for (var key in result) {
+                    result[key] = q.value;
+                }
+            }
             appendToArrays(keys, values, result);
         }
 
@@ -334,7 +337,7 @@ function renderQuestion(state, config, pageConfig, level) {
                 case '$value': replacement = question.value; break;
                 default: replacement = state.references[varName];
             }
-            if (replacement == SKIPPED) {
+            if (replacement instanceof Skipped) {
                 replacement = undefined;
             }
             for (var i = 1; i < filters.length; i++) {
@@ -360,19 +363,30 @@ function renderQuestion(state, config, pageConfig, level) {
 
     var div = $('<div class="question ' + config.type + ' level' + level + '">');
     if (!config.unskippable) {
-        div.append($('<a href="#">').text('Skip').addClass('skip').click(function(e) {
+        var skipDiv = $('<div class="skip">');
+        skipDiv.append($('<a href="#">').text('Skip').click(function(e) {
             e.preventDefault();
-            div.find('input, select, textarea').prop('disabled', !div.hasClass('skipped'));
+            div.find('input, select, textarea').filter(':not(.skipReason)').prop('disabled', !div.hasClass('skipped'));
             if (div.hasClass('skipped')) {
-                div.find('.skip').text('Skip');
+                skipDiv.find('a').text('Skip');
                 div.removeClass('skipped');
                 question.setValue(undefined);
             } else {
-                div.find('.skip').text('Skipped');
+                skipDiv.find('.skip').text('Skipped');
                 div.addClass('skipped');
-                question.setValue(SKIPPED);
+                skipDiv.find('select').select();
             }
         }));
+        skipDiv.append($('<select class="skipReason">')
+            .append(option())
+            .append(option('Respondent doesn\'t have/know answer'))
+            .append(option('Respondent is uncomfortable with the question/refuses to answer'))
+            .append(option('Not applicable'))
+            .append(option('Other'))
+            .change(function() {
+                question.setValue(new Skipped($(this).val()));
+            }));
+        div.append(skipDiv);
     }
     div.append($('<h2>').text(config.label));
     if (config.instructions) {
@@ -401,7 +415,7 @@ function setVisibility(state, scroll) {
         var shouldShow = true;
         var ancestor = question.parent;
         while (ancestor && shouldShow) {
-            if (ancestor.value == SKIPPED) {
+            if (ancestor.value instanceof Skipped) {
                 shouldShow = false;
             }
             ancestor = ancestor.parent;

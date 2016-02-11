@@ -107,7 +107,7 @@ textarea {
     opacity: 0.5;
 }
 
-.question.skipped a.skip {
+.question.skipped div.skip a {
     opacity: 1.0;
     color: #999;
 }
@@ -116,12 +116,29 @@ textarea {
     margin-right: 5em;
 }
 
-.question a.skip {
+.question div.skip {
     float: right;
+    text-align: right;
     padding: 0 0 0.5em 0.5em;
+}
+
+.question div.skip a {
     color: #aaa;
     text-decoration: none;
     font-weight: bold;
+}
+
+.question div.skip select {
+    display: none;
+}
+
+.question.skipped div.skip select {
+    display: block;
+    opacity: 1;
+}
+
+.question.skipped h2 {
+    clear: both;
 }
 
 .question.level2 {

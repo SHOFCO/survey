@@ -1,5 +1,7 @@
 // Marker object for skipped questions.
-SKIPPED = new Object();
+function Skipped(reason) {
+    this.reason = reason;
+}
 
 function getUrlParameter(name) {
     var url = window.location.search;
@@ -15,8 +17,11 @@ function last(arr) {
 }
 
 function csvEscape(value) {
-    if (value == SKIPPED || value === null) {
+    if (value === null) {
         return "";
+    }
+    if (value.reason) {
+        value = 'Skipped: ' + value.reason;
     }
     value = value + "";
     return '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"';
