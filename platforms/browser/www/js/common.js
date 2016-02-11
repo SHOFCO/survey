@@ -22,25 +22,29 @@ function csvEscape(value) {
     return '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"';
 }
 
-function csvUrl(rows) {
-    var csv = [];
+function csv(rows) {
+    var out = [];
     var columnNames = rows[0][0];
 
     var line = [];
     for (var i = 0; i < columnNames.length; i++) {
         line.push(csvEscape(columnNames[i]));
     }
-    csv.push(line.join(','));
-    
+    out.push(line.join(','));
+
     for (var i = 0; i < rows.length; i++) {
         line = [];
         var values = rows[i][1];
         for (var j = 0; j < values.length; j++) {
             line.push(csvEscape(values[j]));
         }
-        csv.push(line.join(','));
+        out.push(line.join(','));
     }
 
-    var csvString = csv.join('\n');
-    return 'data:text/csv;base64,' + btoa(csvString);
+    return out.join('\n');
+}
+
+
+function csvUrl(rows) {
+    return 'data:text/csv;base64,' + btoa(csv(rows));
 }

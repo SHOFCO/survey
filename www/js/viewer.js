@@ -73,7 +73,12 @@ function renderUserPicker() {
         
         if (user.rowCount) {
             usersDiv.append(' (' + user.rowCount + ' completed - ');
-            usersDiv.append($('<a>').text('download').attr('href', csvUrl(getRows(user.userId))));
+            usersDiv.append($('<a>').text('download').attr('href', '#').click(function(e) {
+                window.plugin.email.open({
+                    subject: 'Survey results',
+                    attachments: 'base64:survey.csv//' + btoa(csv(getRows(user.userId)))
+                });
+            }));
             usersDiv.append(' - ');
             usersDiv.append($('<a href="#">').text('clear').click(function(user, e) {
                 e.preventDefault();

@@ -92,6 +92,21 @@ function renderUserPicker() {
         $('#createUser').show();
         $('#createUserName').select();
     }));
+
+    root.append($('<a>').text('test1').attr('href', '#').click(function(e) {
+        e.preventDefault();
+        // Request the file system
+        var onFailure = function(error) {
+            debugger;
+            alert('Error: ' + error);
+        };
+        var data = csv([['a', '1']]);
+        window.plugin.email.open({
+            to: 'robby.walker@gmail.com',
+            subject: 'Survey results',
+            attachments: 'base64:survey.csv//' + btoa(data)
+        });
+    }));
 }
 
 function itemAt(arr, index) {
