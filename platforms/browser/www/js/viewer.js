@@ -748,7 +748,7 @@ function option(opt_text, opt_value) {
 function renderPerson(div, question, config) {
     var keys = [
         config.label,
-        'Birthday',
+        'Birthdate',
         'Gender',
         'Relationship',
         'Level of schooling',
@@ -772,8 +772,7 @@ function renderPerson(div, question, config) {
     var onChange = function(key) {
         var key = $(this).data('key');
         result[key] = $(this).val();
-        console.log(result);
-        if (Object.keys(result).length == keys.length) {
+        if (Object.keys(result).length >= keys.length) {
             question.setValue(result);
         }
     };
