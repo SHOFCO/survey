@@ -752,6 +752,9 @@ function option(opt_text, opt_value) {
 }
 
 function renderPerson(div, question, config) {
+	var feesKey = 'School fees';
+	var freqKey = 'School fee frequency';
+	var sponsoredKey = 'Sponsored';
     var keys = [
         config.label,
         'Birthdate',
@@ -761,9 +764,9 @@ function renderPerson(div, question, config) {
         'Employment Status',
         'Employment Type',
         'Average monthly income',
-        'Sponsored',
-        'School fees',
-        'School fee frequency'
+        sponsoredKey,
+        feesKey,
+        freqKey
     ];
     var result = {};
     question.serializeValue = function(resultObject) {
@@ -812,7 +815,44 @@ function renderPerson(div, question, config) {
         .append(option('Currently attending university', '13'))
         .append(option('Currently attending college', '14'))
         .append(option('Currently attending vocational training', '15'))
-        .change(onChange);
+        .change(function(e) {
+			var feesField = $('#' + question.id + '-school-fees');
+			var freqField = $('#' + question.id + '-school-fee-timeframe');
+			var sponsoredField = $('#' + question.id + '-sponsored');
+			var val = $(this).val();
+			if (val != '11' && val != '12' && val != '13' && val != '14' && val != '15') {
+				result[feesKey] = 'N/A';
+				result[freqKey] = 'N/A';
+				result[sponsoredKey] = 'N/A';
+				feesField.prop('disabled', true);
+				freqField.prop('disabled', true);
+				sponsoredField.prop('disabled', true);
+			} else {
+				feesField.prop('disabled', false);
+				freqField.prop('disabled', false);
+				sponsoredField.prop('disabled', false);
+
+				if (feesField.val() != '') {
+					result[feesKey] = feesField.val();
+				} else {
+					delete result[feesKey];
+				}
+				
+				if (freqField.val() != '') {
+					result[freqKey] = freqField.val();
+				} else {
+					delete result[freqKey];
+				}
+				
+				if (sponsoredField.val() != '') {
+					result[sponsoredKey] = sponsoredField.val();
+				} else {
+					delete result[sponsoredKey];
+				}
+			}
+
+        	onChange.call(this, e);
+        });
     
     renderGenericField(div, question.id + '-employment', 'Employment Status', '<select>')
         .append(option())
@@ -859,17 +899,17 @@ function renderPerson(div, question, config) {
     renderGenericField(div, question.id + '-income', 'Average monthly income', '<input type="number">')
         .change(onChange)
         .parent().append(' Ksh');
-    renderGenericField(div, question.id + '-sponsored', 'Sponsored', '<select>')
+    renderGenericField(div, question.id + '-sponsored', sponsoredKey, '<select>')
         .append(option())
         .append(option('Yes'))
         .append(option('No'))
         .change(onChange);
         
-    var fees = renderGenericField(div, question.id + '-school-fees', 'School fees', '<input type="number">')
+    var fees = renderGenericField(div, question.id + '-school-fees', feesKey, '<input type="number">')
         .change(onChange);
     fees.parent().append(' Ksh ');
     
-    var term = renderGenericField(div, question.id + '-school-fee-timeframe', 'School fee frequency', '<select>')
+    var term = renderGenericField(div, question.id + '-school-fee-timeframe', freqKey, '<select>')
         .append(option())
         .append(option('per month'))
         .append(option('per term'))
