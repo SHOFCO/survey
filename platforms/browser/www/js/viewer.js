@@ -134,10 +134,16 @@ function renderPages() {
     };
     window.debugState = state;
     
-    var gpsStatus = $('<div id="gpsStatus">').text('GPS: Loading');
+    var gpsRoot = $('<div id="gpsRoot">');
+	var gpsStatus = $('<span id="gpsStatus">').text('GPS: Loading');
+	var lat = $('<input placeholder="lat" name="lat" type="text">');
+	var lng = $('<input placeholder="long" name="lng" type="text">');
+	gpsRoot.append(gpsStatus, ' ', lat, ' ', lng)
     navigator.geolocation.getCurrentPosition(function(location) {
         // Success.
         state.coords = location.coords;
+		lat.val(location.coords.latitude + '');
+		lng.val(location.coords.longitude + '');
         gpsStatus.text('GPS: OK').addClass('ok');
     }, function(err) {
         // Errors.
@@ -184,7 +190,7 @@ function renderPages() {
     
     var root = $('#survey');
     root.empty();
-    root.append(gpsStatus);
+    root.append(gpsRoot);
     for (var i = 0; i < pages.length; i++) {
         $(root).append(renderPage(state, pages[i]));
     }
@@ -196,8 +202,8 @@ function renderPages() {
         appendToArrays(keys, values, {  
             "Start Time": state.startTime,
             "End Time": state.endTime,
-            "Latitude": state.coords ? state.coords.latitude : null,
-            "Longitude": state.coords ? state.coords.longitude : null,
+            "Latitude": lat.text(),
+            "Longitude": lng.text(),
             "GPS Accuracy": state.coords ? state.coords.accuracy : null
         });        
         

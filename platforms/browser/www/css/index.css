@@ -80,7 +80,7 @@ textarea {
     width: 100%;
 }
 
-#gpsStatus {
+#gpsRoot {
     float: right;
     font-size: 11pt;
     color: #999;
@@ -93,6 +93,13 @@ textarea {
 
 #gpsStatus.error {
     color: #f99;
+}
+
+#gpsRoot input {
+	font-size: 11pt;
+	border: 1px solid #999;
+	width: 5em;
+	color: #999;
 }
 
 .question {
