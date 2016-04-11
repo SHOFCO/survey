@@ -582,7 +582,7 @@ function renderCheckboxes(div, question, config) {
             }
             any = any || !!val;
         });
-        if (any && (allSet || !config.forceChoice)) {
+        if (config.forceChoice ? allSet : any) {
             question.setValue(result);
             $('#' + noneId).prop('checked', false);
         } else if ($('#' + noneId).is(':checked')) {
