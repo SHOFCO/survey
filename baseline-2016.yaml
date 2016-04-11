@@ -499,7 +499,7 @@
     static: Now I'd like to ask you some questions about you and your household's access to water and sanitation. 
     questions:
     -   label: Where do you get your drinking water?
-        type: options
+        type: checkboxes
         options:
         - Tap
         - River
@@ -510,7 +510,7 @@
         type: yesNo
         subs:
         -   label: Where do you get your water for other purposes?
-            type: options
+            type: checkboxes
             when: ($parent) == 'No'
             options:
             - Tap
@@ -1043,9 +1043,8 @@
         - Extremely
     
     -   label: "If you or your relative were a victim of rape, who would you turn to for help?"
-        type: options
+        type: checkboxes
         options:
-        - I wouldn't seek help
         - My Church/Mosque
         - NGO/CBO GBV services
         - Clinic/Hospital
@@ -1054,11 +1053,12 @@
         - Police
         - Chief
         - I don't know
+		other: yes
+		noneOfTheAbove: yes
         
     -   label: "If you or your relative were a victim of domestic violence, who would you turn to for help?"
-        type: options
+        type: checkboxes
         options:
-        - I wouldn't seek help
         - My Church/Mosque
         - NGO/CBO GBV services
         - Local Clinic/Hospital
@@ -1067,6 +1067,8 @@
         - Police
         - Chief
         - I don't know
+		other: yes
+		noneOfTheAbove: yes
 
 
 ##########################################################################
