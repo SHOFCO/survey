@@ -14,7 +14,7 @@ RENDER = {
 
 window.loggedInUser = null;
 
-$(document).ready(function() {
+function renderViewer() {
     $('#createUser form').submit(function(e) {
         e.preventDefault();
         var name = $('#createUserName').val();
@@ -43,7 +43,7 @@ $(document).ready(function() {
     if (getUrlParameter('user')) {
         selectUser(getUsers()[window.parseInt(getUrlParameter('user'), 10)]);
     }
-});
+}
 
 function selectUser(user) {
     window.loggedInUser = user;

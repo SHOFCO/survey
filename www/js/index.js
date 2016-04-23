@@ -33,7 +33,16 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        // TODO
+		if (device.platform != 'browser') {
+			window.onerror = function(msg, url, linenumber, col, error) {
+		  	  	var stack = error.stack.replace(/^[^\(]+?[\n$]/gm, '')
+		        	.replace(/^\s+at\s+/gm, '')
+					.replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@');
+				alert('Error: ' + msg + '\n' + stack);
+			    return true;
+			};
+		}
+        renderViewer();
     }
 };
 
