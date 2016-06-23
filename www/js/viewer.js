@@ -15,6 +15,14 @@ RENDER = {
 window.loggedInUser = null;
 
 function renderViewer() {
+	cordova.plugins.email.isAvailable(
+	    function (isAvailable) {
+			if (!isAvailable) {
+				alert('Please set up an email account');
+			}
+	    }
+	);
+	
     $('#createUser form').submit(function(e) {
         e.preventDefault();
         var name = $('#createUserName').val();
