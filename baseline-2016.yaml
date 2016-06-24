@@ -207,6 +207,7 @@
     -   label: Spouse
         type: person
         relationship: Spouse
+        when: "(maritalStatus) == 'Married'"
     
     -   label: "Person 1"
         type: person
