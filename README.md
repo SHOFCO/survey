@@ -69,3 +69,12 @@ easy_install PyYAML
 
 This may give errors - these can be ignored!
 
+## Building a new app binary
+
+```
+cordova build android --debug
+```
+
+Upload to Dropbox
+
+Get and send Dropbox sharing link
