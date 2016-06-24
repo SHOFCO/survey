@@ -17,6 +17,7 @@ Nice to have:
 * Local storage: survey in progress (1 hour)
 * Class hierarchy for input controls
 * Unit tests for input controls
+* Connect household chart count with "How many people live in your house?" question
 
 
 # Notes
@@ -37,7 +38,7 @@ https://nodejs.org/en/
 
 ### Install JDK
 
-http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+Mac: http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
 ### Install Android command line tools
 
@@ -59,3 +60,12 @@ npm install -g cordova
 cordova platform add android --save
 cordova platform add browser --save
 ```
+
+### Install yaml library for python
+
+```
+easy_install PyYAML
+```
+
+This may give errors - these can be ignored!
+
