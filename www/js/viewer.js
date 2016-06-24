@@ -61,7 +61,7 @@ function renderUserPicker() {
         var userDiv = $('<div class="user">');
         var user = users[i];
         
-        usersDiv.append($('<a href="#">').text(user.name).click(function(user, e) {
+        userDiv.append($('<a href="#">').text(user.name).click(function(user, e) {
             e.preventDefault();
             var pin = prompt('Enter pin for ' + user.name);
             if (pin == user.pin) {
@@ -72,7 +72,7 @@ function renderUserPicker() {
         }.bind(this, user)));
         
         if (user.rowCount) {
-            usersDiv.append(' (' + user.rowCount + ' completed - ');
+            userDiv.append(' (' + user.rowCount + ' completed - ');
             var downloadLink = $('<a>').text('download');
             if (device.platform == 'browser') {
                 downloadLink.attr('href', csvUrl(getRows(user.userId)));                
@@ -85,17 +85,18 @@ function renderUserPicker() {
                     });
                 });
             }
-            usersDiv.append(downloadLink);
-            usersDiv.append(' - ');
-            usersDiv.append($('<a href="#">').text('clear').click(function(user, e) {
+            userDiv.append(downloadLink);
+            userDiv.append(' - ');
+            userDiv.append($('<a href="#">').text('clear').click(function(user, e) {
                 e.preventDefault();
                 if (confirm('Are you sure you want to clear ' + user.rowCount + ' rows?')) {
                     clearUserRows(user.userId);
                     renderUserPicker();
                 }
             }.bind(this, user)));
-            usersDiv.append(')');
+            userDiv.append(')');
         }
+		usersDiv.append(userDiv);
     }
     root.append(usersDiv);
     root.append($('<br>'))
