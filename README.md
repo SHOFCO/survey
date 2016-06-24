@@ -52,3 +52,10 @@ Set `ANDROID_HOME` in .bash\_profile
 ### Install Cordova
 
 npm install -g cordova
+
+### Add Cordova platforms
+
+```
+cordova platform add android --save
+cordova platform add browser --save
+```
