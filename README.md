@@ -1,4 +1,4 @@
-# Editing a survey
+# Editing the survey
 
 * Download TextMate
 * Navigate to TextMate > Preferences > Bundles
@@ -9,14 +9,14 @@
 
 # TODO
 
-* Annual Survey Household Chart
-* Remaining sections (2 hours)
 * Number field min/max support + validation
-* Retry / manual entry when GPS fails
 
 Nice to have:
 
+* Password style input for PIN for signature control and log in
 * Local storage: survey in progress (1 hour)
+* Class hierarchy for input controls
+* Unit tests for input controls
 
 
 # Notes
@@ -43,9 +43,11 @@ http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.h
 
 https://developer.android.com/studio/index.html#downloads
 
-Run tools/android
+Run `tools/android`
 
 Install Android 4.4.2 SDK
+
+Set `ANDROID_HOME` in .bash\_profile
 
 ### Install Cordova
 
