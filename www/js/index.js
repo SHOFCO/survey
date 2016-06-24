@@ -42,6 +42,13 @@ var app = {
 			    return true;
 			};
 		}
+		cordova.plugins.email.isAvailable(
+		    function (isAvailable) {
+				if (!isAvailable) {
+					alert('Please set up an email account');
+				}
+		    }
+		);
         renderViewer();
     }
 };
